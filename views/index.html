@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PIPH - Registration</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <section class="container card" id="login-section">
+      <!-- Sliding Greeting Page -->
+      <div class="greeting-box" id="greeting-container">
+        <div class="content">
+          <h2 id="greeting-title">Hello, Friend!</h2>
+          <p id="greeting-message">New here? Sign up now!</p>
+          <button id="toggle-form" class="toggle-btn">Already have an account</button>
+        </div>
+      </div>
+
+      <!-- Forms Container -->
+      <div class="form-container" id="form-container">
+        <!-- Sign-Up Form -->
+        <form id="signup-form" class="form">
+          <h2>Sign Up</h2>
+          <input type="text" id="signup-name" placeholder="Full Name" />
+          <span id="signup-name-error" class="error-message"></span>
+          <input
+            type="email"
+            id="signup-email"
+            placeholder="Email"
+            class="verification-status"
+          />
+          <span id="signup-email-status" class="status-icon">✅</span>
+          <!-- <span id="email-status" class="status-icon">❌</span> -->
+          <span id="signup-email-error" class="error-message"></span>
+          <input type="password" id="signup-password" placeholder="Password" />
+          <img
+            src="show-password.png"
+            alt="Show Password"
+            class="toggle-password"
+            id="toggle-signup-password"
+          />
+          <span id="signup-password-error" class="error-message"></span>
+          <button type="submit" class="btn">Sign Up</button>
+        </form>
+
+        <!-- Log-In Form -->
+        <form id="login-form" class="form hidden">
+          <h2>Log In</h2>
+          <input type="email" id="login-email" placeholder="Email" />
+          <span id="login-email-status" class="status-icon">✅</span>
+          <span id="login-email-error" class="error-message"></span>
+          <input type="password" id="login-password" placeholder="Password" />
+          <img
+            src="show-password.png"
+            alt="Show Password"
+            class="toggle-password"
+            id="toggle-login-password"
+          />
+          <span id="login-password-error" class="error-message"></span>
+          <button type="submit" class="btn">Log In</button>
+        </form>
+
+        <!-- OTP Verification Form -->
+      </div>
+      <form id="otp-form" class="form hidden">
+        <h2>Verify OTP</h2>
+        <input type="text" id="otp" placeholder="Enter OTP" required />
+        <p id="error-message" class="error-message"></p>
+        <button type="submit">Verify OTP</button>
+      </form>
+    </section>
+    <div class="popup" id="popup">
+      <span class="popup-text" id="popup-text"></span>
+      <button class="close-popup btn" id="close-popup">Close</button>
+    </div>
+
+    <script>
+      // Check if the user is already logged in
+      if (localStorage.getItem("token")) {
+        // Redirect to /request if logged in
+        window.location.href = "/firstPage";
+      }
+      const toggleFormButton = document.getElementById("toggle-form");
+      const greetingBox = document.getElementById("greeting-container");
+      const formContainer = document.getElementById("form-container");
+      const signupForm = document.getElementById("signup-form");
+      const loginForm = document.getElementById("login-form");
+      const otpForm = document.getElementById("otp-form");
+      const signupEmail = document.getElementById("signup-email");
+      const signupPassword = document.getElementById("signup-password");
+      const loginEmail = document.getElementById("login-email");
+      const loginPassword = document.getElementById("login-password");
+      const otpInput = document.getElementById("otp");
+      let currentAction = "signup"; // Default action is signup
+      // Select the password inputs and eye icons
+      const toggleSignupPassword = document.getElementById(
+        "toggle-signup-password"
+      );
+      const toggleLoginPassword = document.getElementById(
+        "toggle-login-password"
+      );
+      // Select the password inputs and image icons
+
+      const signupPasswordInput = document.getElementById("signup-password");
+      const loginPasswordInput = document.getElementById("login-password");
+
+      // Paths to the show and hide icons
+      const showPasswordIcon = "show-password.png";
+      const hidePasswordIcon = "hide-password.png";
+
+      // Function to toggle password visibility and switch images
+      function togglePasswordVisibility(input, toggleIcon) {
+        if (input.type === "password") {
+          input.type = "text";
+          toggleIcon.src = hidePasswordIcon; // Change to "hide" icon
+          toggleIcon.alt = "Hide Password";
+        } else {
+          input.type = "password";
+          toggleIcon.src = showPasswordIcon; // Change back to "show" icon
+          toggleIcon.alt = "Show Password";
+        }
+      }
+
+      // Attach event listeners to the image icons
+      toggleSignupPassword.addEventListener("click", () => {
+        togglePasswordVisibility(signupPasswordInput, toggleSignupPassword);
+      });
+
+      toggleLoginPassword.addEventListener("click", () => {
+        togglePasswordVisibility(loginPasswordInput, toggleLoginPassword);
+      });
+
+      // Toggle between sign up and log in forms
+      //       emailStatus.textContent = "❌";
+      // emailStatus.classList.add("error");
+
+      const popup = document.getElementById("popup");
+      const popupText = document.getElementById("popup-text");
+      const closePopupButton = document.getElementById("close-popup");
+
+      closePopupButton.addEventListener("click", () => {
+        popup.style.display = "none";
+      });
+
+      function showPopupMessage(message) {
+        popupText.textContent = message;
+        popup.style.display = "flex";
+      }
+      toggleFormButton.addEventListener("click", function () {
+        if (currentAction === "signup") {
+          updateLogin();
+          greetingBox.classList.toggle("active");
+          formContainer.classList.toggle("active");
+          signupForm.classList.toggle("hidden");
+          loginForm.classList.toggle("hidden");
+          currentAction = "login";
+          toggleFormButton.textContent = "Don't have an account? Sign up!";
+        } else {
+          greetingBox.classList.toggle("active");
+          formContainer.classList.toggle("active");
+          loginForm.classList.toggle("hidden");
+          signupForm.classList.toggle("hidden");
+          currentAction = "signup";
+          toggleFormButton.textContent = "Already have an account";
+        }
+      });
+      function updateLogin() {
+        const email = signupEmail.value;
+        const password = signupPassword.value;
+        loginEmail.value = email;
+        loginPassword.value = password;
+      }
+      // Handle Sign Up form submission
+      signupForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const email = signupEmail.value;
+        const password = signupPassword.value;
+        const name = document.getElementById("signup-name").value;
+        // const email = document.getElementById("signup-email").value;
+        // const password = document.getElementById("signup-password").value;
+
+        const signupNameError = document.getElementById("signup-name-error");
+        const signupEmailError = document.getElementById("signup-email-error");
+        const signupPasswordError = document.getElementById(
+          "signup-password-error"
+        );
+
+        if (!name) {
+          signupNameError.textContent = "Name is required";
+        } else {
+          signupNameError.textContent = "";
+        }
+
+        if (!email) {
+          signupEmailError.textContent = "Email is required";
+        } else {
+          signupEmailError.textContent = "";
+        }
+
+        if (!password) {
+          signupPasswordError.textContent = "Password is required";
+        } else {
+          signupPasswordError.textContent = "";
+        }
+
+        // Send OTP for registration
+        fetch("/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.message) {
+              showPopupMessage(data.message); // OTP sent
+              // Switch to OTP verification form
+              formContainer.classList.add("hidden");
+              otpForm.classList.remove("hidden");
+              greetingBox.classList.add("hidden");
+            } else {
+              showPopupMessage("Error during signup");
+            }
+          })
+          .catch((err) => showPopupMessage("Error: " + err));
+      });
+
+      // Handle OTP verification form submission
+      otpForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const email = signupEmail.value; // Same email as used during sign-up
+        const otp = otpInput.value;
+        const errorMessage = document.getElementById("error-message");
+
+        if (otp.length === 6 && /^\d{6}$/.test(otp)) {
+          errorMessage.textContent = "";
+        } else {
+          errorMessage.textContent = "Please enter a valid 6-digit OTP.";
+        }
+        
+
+        // Verify OTP
+        fetch("/register/verify", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, otp, password: signupPassword.value }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.message) {
+              showPopupMessage(data.message); // Registration successful
+              // otpForm.classList.add("hidden");
+              // greetingBox.classList.add("active");
+              // greetingBox.classList.remove("hidden");
+              // signupEmail.classList.add("email-text")
+              // loginEmail.classList.add("email-text")
+              // formContainer.classList.remove("hidden");
+              window.location.href = "/firstPage";
+              localStorage.setItem("token", data.token);
+              // Refresh the page and show login form
+              // window.location.reload();
+            } else {
+              showPopupMessage("OTP verification failed");
+            }
+          })
+          .catch((err) => showPopupMessage("Error: " + err));
+      });
+
+      // Handle Log In form submission
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        // updateLogin()
+        const email = loginEmail.value;
+        const password = loginPassword.value;
+
+        // Log In request
+        fetch("/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.token) {
+              showPopupMessage("Login successful");
+              // Store JWT token for session
+              localStorage.setItem("token", data.token);
+            } else {
+              showPopupMessage("Invalid credentials");
+            }
+          })
+          .catch((err) => showPopupMessage("Error: " + err));
+      });
+      // Email Status Ticks
+      const signupEmailStatus = document.getElementById("signup-email-status");
+      const loginEmailStatus = document.getElementById("login-email-status");
+
+      // Function to show or hide the tick after email verification
+      function updateEmailStatus(input, statusIcon, errorElement, isValid) {
+        if (isValid) {
+          errorElement.textContent = ""; // Clear any error message
+          statusIcon.style.display = "inline"; // Show the tick
+        } else {
+          errorElement.textContent = "Invalid email address"; // Show error message
+          statusIcon.style.display = "none"; // Hide the tick
+        }
+      }
+
+      // Validate email format
+      function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      }
+
+      // Event listeners for email inputs (Sign-Up and Log-In forms)
+      signupEmail.addEventListener("input", () => {
+        const isValid = isValidEmail(signupEmail.value);
+        signupEmailStatus.classList.add("hidden")
+        updateEmailStatus(
+          signupEmail,
+          signupEmailStatus,
+          document.getElementById("signup-email-error"),
+          isValid
+        );
+      });
+
+      loginEmail.addEventListener("input", () => {
+        const isValid = isValidEmail(loginEmail.value);
+        updateEmailStatus(
+          loginEmail,
+          loginEmailStatus,
+          document.getElementById("login-email-error"),
+          isValid
+        );
+      });
+
+      // Prevent navigation on errors during Log-In
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault(); // Prevent form submission
+
+        const email = loginEmail.value;
+        const password = loginPassword.value;
+        const emailError = document.getElementById("login-email-error");
+        const passwordError = document.getElementById("login-password-error");
+
+        // Validate inputs
+        let hasError = false;
+        if (!email) {
+          emailError.textContent = "Email is required";
+          hasError = true;
+        } else if (!isValidEmail(email)) {
+          emailError.textContent = "Invalid email address";
+          hasError = true;
+        } else {
+          emailError.textContent = "";
+        }
+
+        if (!password) {
+          passwordError.textContent = "Password is required";
+          hasError = true;
+        } else {
+          passwordError.textContent = "";
+        }
+
+        if (hasError) {
+          showPopupMessage("Please fix the errors before logging in.");
+        } else {
+          // Proceed to send login request
+          fetch("/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.token) {
+                // Store the token and navigate to the index page
+                localStorage.setItem("token", data.token);
+                window.location.href = "/firstPage";
+              } else {
+                showPopupMessage("Invalid credentials");
+              }
+            })
+            .catch((err) => showPopupMessage("Error: " + err));
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Dashboard - Pandemic Response</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-papK4lMGcp0W2w6urVChD+2djA2y6KxR4hqJ95y7o+cHDPCfz1pXlRx3d72t6uR/ZlS0R6k2lxHlV4k+oLU3rQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/firstPage.css" />
+    <link rel="stylesheet" href="/sidebar.css" />
+    <style>
+        /* Alert List Styles */
+        .alert-list {
+            display: grid;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .alert-card {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .alert-card:nth-child(1) { animation-delay: 0.2s; }
+        .alert-card:nth-child(2) { animation-delay: 0.4s; }
+        .alert-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .alert-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .alert-card.alerted {
+            background: #fff3cd;
+        }
+
+        .alert-card h3 {
+            font-size: 1.4rem;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+
+        .alert-card p {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin: 0.5rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .alert-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="logo" onclick="window.location.href='/'">
+        <img src="/logo.png" alt="Pandemic Response Logo" class="logo-img" />
+    </div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-links" id="sidebar-links">
+            <a href="/" class="sidebar-link"><i class="fa-solid fa-home"></i> Home</a>
+            <a href="/firstPage" class="sidebar-link"><i class="fa-solid fa-virus"></i> Dashboard</a>
+            <a href="/pandamic" class="sidebar-link"><i class="fa-solid fa-virus"></i> Live Pandemic Stats</a>
+            <a href="/request" class="sidebar-link"><i class="fa-solid fa-box-open"></i> Need Resources</a>
+            <a href="/map" class="sidebar-link"><i class="fa-solid fa-hospital"></i> Find Hospitals</a>
+            <a href="/stats" class="sidebar-link"><i class="fa-solid fa-chart-pie"></i> Graph Analytics</a>
+            <a href="/organizations" class="sidebar-link"><i class="fa-solid fa-building"></i> Organizations</a>
+            <a href="/org-dashboard" class="sidebar-link"><i class="fa-solid fa-tachometer-alt"></i> Org Dashboard</a>
+            <a href="/user-dashboard" class="sidebar-link"><i class="fa-solid fa-user"></i> User Dashboard</a>
+            <a href="/profile" class="sidebar-link"><i class="fa-solid fa-id-card"></i> Profile</a>
+        </div>
+        <div class="user-profile">
+            <img src="/default-user.png" alt="User Photo" id="user-photo" class="user-photo" onclick="toggleSidebarMobile()" />
+            <div class="user-info">
+                <span id="user-name">Admin</span>
+                <span id="user-email">admin@example.com</span>
+            </div>
+            <button class="profile-btn" onclick="window.location.href='/profile'">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+    <div class="mobile-toggle" onclick="toggleSidebarMobile()">
+        <i class="fa-solid fa-bars mobile-hamburger"></i>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Hospital Dashboard</h1>
+                <p>Monitor incoming alerts in real-time.</p>
+            </div>
+        </section>
+
+        <div class="alert-list" id="alert-list"></div>
+    </main>
+
+    <script src="/sidebar.js"></script>
+    <script>
+        const ws = new WebSocket('ws://localhost:5000');
+        const allowedEmails = ["sunilnp@acem.edu.in", "ofcsatyam007@gmail.com", "vanshajs11@gmail.com"];
+        const userEmail = localStorage.getItem('email');
+
+        // Authorization Check
+        if (!userEmail || !allowedEmails.includes(userEmail)) {
+            alert('Access denied. Only allowed hospital staff can view this page.');
+            window.location.href = '/login';
+        } else {
+            updateSidebar();
+            document.getElementById('user-email').textContent = userEmail;
+        }
+
+        ws.onopen = () => {
+            console.log('Hospital connected');
+            ws.send(JSON.stringify({ type: 'hospital-connect' }));
+        };
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'alert') {
+                const alertList = document.getElementById('alert-list');
+                const alertCard = document.createElement('div');
+                alertCard.className = 'alert-card alerted';
+                alertCard.innerHTML = `
+                    <h3>Alert from ${data.alert.userEmail}</h3>
+                    <p>${data.alert.message}</p>
+                    <p>${new Date(data.alert.timestamp).toLocaleString()}</p>
+                `;
+                alertList.prepend(alertCard);
+            }
+        };
+
+        function updateSidebar() {
+            const sidebarLinks = document.getElementById('sidebar-links');
+            sidebarLinks.innerHTML += `
+                <a href="/hospital-dashboard" class="sidebar-link"><i class="fa-solid fa-hospital-user"></i> Hospital Dashboard</a>
+                <a href="/admin" class="sidebar-link"><i class="fa-solid fa-cogs"></i> Manage Requests</a>
+            `;
+        }
+    </script>
+</body>
+</html>

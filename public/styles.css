@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #e8f5e9, #f5f7fa);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    width: 900px;
+    height: 550px;
+    display: flex;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background: #fff;
+}
+
+/* Greeting Box */
+.greeting-box {
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(135deg, #388e3c, #2e7d32);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    transition: transform 0.5s ease;
+}
+
+.greeting-box.active {
+    transform: translateX(100%);
+}
+
+.greeting-box .content {
+    text-align: center;
+    padding: 2rem;
+}
+
+.logo {
+    height: 80px;
+    margin-bottom: 1.5rem;
+}
+
+.greeting-box h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.greeting-box p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.toggle-btn {
+    background: #fff;
+    color: #388e3c;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.toggle-btn:hover {
+    background: #e8f5e9;
+    transform: scale(1.05);
+}
+
+/* Form Container */
+.form-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    transition: transform 0.5s ease;
+}
+
+.form-container.active {
+    transform: translateX(-50%);
+}
+
+.form {
+    width: 50%;
+    padding: 2rem;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #2e7d32;
+    margin-bottom: 1.5rem;
+}
+
+.input-group {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    margin-bottom: 1.5rem;
+}
+
+.form input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form input:focus {
+    outline: none;
+    border-color: #388e3c;
+    box-shadow: 0 0 5px rgba(56, 142, 60, 0.3);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.status-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: #388e3c;
+    display: none;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    text-align: left;
+    width: 100%;
+}
+
+.btn {
+    background: #388e3c;
+    color: #fff;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+    background: #2e7d32;
+    transform: scale(1.05);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Popup */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    z-index: 1000;
+}
+
+.popup-text {
+    font-size: 1rem;
+    color: #333;
+}
+
+.close-popup {
+    background: #388e3c;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.close-popup:hover {
+    background: #2e7d32;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        height: auto;
+        flex-direction: column;
+    }
+
+    .greeting-box, .form {
+        width: 100%;
+    }
+
+    .greeting-box.active {
+        transform: translateX(0);
+        display: none;
+    }
+
+    .form-container {
+        justify-content: center;
+    }
+
+    .form-container.active {
+        transform: translateX(0);
+    }
+
+    .form h2 {
+        font-size: 1.5rem;
+    }
+}

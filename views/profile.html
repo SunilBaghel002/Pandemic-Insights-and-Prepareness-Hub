@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pandemic Response Dashboard</title>
+    <style>
+      /* Basic Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f1f1f1; /* Default Background */
+      }
+
+      /* Sidebar */
+      .sidebar {
+        width: 250px;
+        height: 100%;
+        background-color: white;
+        position: fixed;
+        top: 0;
+        right: -250px; /* Hidden by default */
+        transition: right 0.3s ease-in-out;
+        padding-top: 40px;
+        padding-left: 20px;
+        border-radius: 15px 0 0 15px; /* Rounded corners */
+        overflow-y: auto;
+        transition: all 0.5s ease;
+      }
+
+      .sidebar.active {
+        right: 0; /* Slide in */
+      }
+
+      .sidebar a {
+        padding: 15px;
+        text-decoration: none;
+        font-size: 18px;
+        color: #333;
+        display: block;
+        margin: 10px;
+        border-radius: 10px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5) inset;
+      }
+
+      .sidebar a:hover {
+        background-color: #66bb6a; /* Green on hover */
+        color: white;
+      }
+
+      /* Logo */
+      .logo {
+        position: absolute;
+        right: 10px;
+        cursor: pointer;
+        margin: 30px;
+        width: fit-content;
+      }
+
+      .logo img {
+        width: 100%;
+        max-width: 60px;
+        /* mix-blend-mode: color-burn; */
+      }
+      .logo2 {
+        cursor: pointer;
+        margin: 30px;
+        width: fit-content;
+      }
+      .logo2 img {
+        width: 100%;
+        max-width: 60px;
+      }
+
+      /* Support Button */
+      .support-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background-color: #388e3c;
+        color: white;
+        border: none;
+        padding: 15px;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .support-btn:hover {
+        background-color: #2c6b2f;
+      }
+
+      .change-theme {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 16px;
+        color: #388e3c;
+        cursor: pointer;
+        margin: 10px;
+        border-radius: 10px;
+        padding: 10px;
+        border: 2px solid #388e3c;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .change-theme:hover {
+        background-color: #388e3c;
+        color: white;
+      }
+
+      /* Theme Options Pop-Up */
+      .theme-popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+
+      /* Theme Option Boxes (Horizontal, Circular) */
+      .theme-option-container {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+      }
+
+      .theme-option {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid #388e3c;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+      }
+
+      .theme-option:hover {
+        transform: scale(1.1);
+        border-color: #66bb6a;
+      }
+
+      /* Overlay */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        z-index: 999;
+      }
+
+      /* Theme Previews */
+      .theme1 {
+        background: linear-gradient(45deg, white, #81c784);
+      }
+      .theme2 {
+        background: linear-gradient(45deg, white, #42a5f5);
+      }
+      .theme3 {
+        background: linear-gradient(45deg, white, #9c27b0);
+      }
+      .theme4 {
+        background: linear-gradient(45deg, white, #f44336);
+      }
+      .theme5 {
+        background: linear-gradient(45deg, white, #ff9800);
+      }
+      .theme6 {
+        background: linear-gradient(45deg, white, #f06292);
+      }
+      .theme7 {
+        background: linear-gradient(45deg, white, #ffeb3b);
+      }
+      .theme8 {
+        background: linear-gradient(45deg, white, #8d6e63);
+      }
+
+      /* Rectangular Buttons (Reset, Default) */
+      .button {
+        padding: 12px 20px;
+        background-color: #388e3c;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        margin: 10px 0;
+        width: 100%;
+      }
+
+      .button:hover {
+        background-color: #66bb6a;
+      }
+
+      /* Input Field for Custom Background Image */
+      .input-field {
+        margin: 15px 0;
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Logo (Clickable to toggle sidebar) -->
+    <div class="logo" onclick="toggleSidebar()">
+      <img src="logohaire.png" alt="Pandemic Response Logo" />
+      <!-- Replace with your image file -->
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <!-- Logo in Sidebar -->
+      <div class="logo2">
+        <img src="logohaire.png" alt="Pandemic Response Logo" />
+      </div>
+
+      <!-- Update Profile Option -->
+      <a href="profile.html">Update Profile</a>
+
+      <!-- Other Options -->
+      <a href="pandamic.html">Live Pandemic Stats</a>
+      <a href="request.html">Need Resources</a>
+      <a href="#">Need Help</a>
+      <a href="#">Emergency Help</a>
+      <a href="firstPage.html">Pandemic Stats</a>
+      <a href="#">Find Nearby Hospitals</a>
+      <a href="#">Dashboard Analytics</a>
+
+      <!-- Change Theme Option -->
+      <div class="change-theme" onclick="openThemePopup()">Change Theme</div>
+
+      <!-- Support Button -->
+      <button class="support-btn">?</button>
+    </div>
+
+    <!-- Overlay for theme popup -->
+    <div class="overlay" id="overlay" onclick="closeThemePopup()"></div>
+
+    <!-- Theme Options Pop-Up -->
+    <div class="theme-popup" id="theme-popup">
+      <h3>Select a Theme</h3>
+
+      <!-- Horizontal Theme Options -->
+      <div class="theme-option-container">
+        <div class="theme-option theme1" onclick="changeTheme('theme1')"></div>
+        <div class="theme-option theme2" onclick="changeTheme('theme2')"></div>
+        <div class="theme-option theme3" onclick="changeTheme('theme3')"></div>
+        <div class="theme-option theme4" onclick="changeTheme('theme4')"></div>
+        <div class="theme-option theme5" onclick="changeTheme('theme5')"></div>
+        <div class="theme-option theme6" onclick="changeTheme('theme6')"></div>
+        <div class="theme-option theme7" onclick="changeTheme('theme7')"></div>
+        <div class="theme-option theme8" onclick="changeTheme('theme8')"></div>
+      </div>
+
+      <!-- Additional Options (Custom Image) -->
+      <button class="button" onclick="openCustomImagePopup()">
+        Custom Theme
+      </button>
+
+      <!-- Custom Image Popup -->
+      <div id="custom-image-popup" style="display: none; text-align: center">
+        <input
+          type="file"
+          class="input-field"
+          id="image-upload"
+          accept="image/*"
+        />
+        <button class="button" onclick="applyCustomImage()">Apply Image</button>
+      </div>
+
+      <!-- Close Popup and Reset Options -->
+      <button class="button" onclick="resetTheme()">Reset Theme</button>
+    </div>
+
+    <script>
+      // Toggle Sidebar visibility
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        sidebar.classList.toggle("active");
+      }
+
+      // Open the theme selection popup
+      function openThemePopup() {
+        document.getElementById("theme-popup").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+      }
+
+      // Close the theme selection popup
+      function closeThemePopup() {
+        document.getElementById("theme-popup").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+        document.getElementById("custom-image-popup").style.display = "none"; // Hide custom image upload popup
+      }
+      const sidebar = document.getElementById("sidebar");
+      // Change the sidebar theme
+      function changeTheme(theme) {
+        // Reset all themes
+        sidebar.classList.remove(
+          "theme1",
+          "theme2",
+          "theme3",
+          "theme4",
+          "theme5",
+          "theme6",
+          "theme7",
+          "theme8"
+        );
+
+        // Apply the selected theme
+        sidebar.classList.add(theme);
+
+        // Close the theme popup
+        closeThemePopup();
+      }
+
+      // Reset the theme to default
+      function resetTheme() {
+        const sidebar = document.getElementById("sidebar");
+
+        // Remove only the theme-related classes (don't remove all styles)
+        sidebar.classList.remove(
+          "theme1",
+          "theme2",
+          "theme3",
+          "theme4",
+          "theme5",
+          "theme6",
+          "theme7",
+          "theme8"
+        );
+
+        // Remove custom background image if any
+        sidebar.style.backgroundImage = "";
+
+        // Close theme popup
+        closeThemePopup();
+      }
+
+      // Open the Custom Image upload popup
+      function openCustomImagePopup() {
+        document.getElementById("custom-image-popup").style.display = "block";
+      }
+
+      // Apply custom image as background for sidebar
+      function applyCustomImage() {
+        const file = document.getElementById("image-upload").files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            const sidebar = document.getElementById("sidebar");
+            sidebar.style.backgroundImage = `url(${event.target.result})`;
+            closeThemePopup();
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+      const logoIcon = document.querySelector(".logo");
+      document.addEventListener("click", (e) => {
+        if (
+          e.target !== sidebar &&
+          !sidebar.contains(e.target) &&
+          e.target !== logoIcon &&
+          !logoIcon.contains(e.target)
+        ) {
+          sidebar.classList.remove("active"); // Corrected from `toggle` to `remove`
+        }
+      });
+      document.querySelectorAll(".sidebar a").forEach((link) => {
+        link.addEventListener("click", () => {
+          sidebar.classList.remove("active");
+        });
+      });
+    //   document.addEventListener("click", (e) => {
+    //     const themePopup = document.getElementById("theme-popup");
+    //     if (
+    //       e.target !== themePopup &&
+    //       !themePopup.contains(e.target) &&
+    //       e.target !== sidebar
+    //     ) {
+    //       closeThemePopup();
+    //     }
+    //   });
+
+      document.querySelector(".support-btn").addEventListener("click", () => {
+        alert("Support feature coming soon!");
+      });
+    </script>
+  </body>
+</html>

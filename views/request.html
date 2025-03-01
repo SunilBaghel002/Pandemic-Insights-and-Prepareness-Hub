@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Request Resources - Pandemic Response</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="/firstPage.css" />
+    <link rel="stylesheet" href="/sidebar.css" />
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+      /* Page-Specific Styles */
+      body {
+        position: relative;
+        overflow-x: hidden;
+        background: linear-gradient(135deg, #f0f4f8 0%, #ffffff 100%); /* Added light background */
+      }
+
+      #particles-js {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+
+      .main-content {
+        padding: 30px 40px;
+      }
+
+      .section-card {
+        background: #ffffff; /* White background */
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid #d1d5db; /* Light grey border */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+        margin-bottom: 20px;
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      .section-card h2 {
+        font-size: 2rem;
+        color: #1e40af; /* Blue instead of cyan */
+        margin-bottom: 15px;
+        text-align: center;
+      }
+
+      .resources-grid {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        
+      }
+
+      .resource-card {
+        background: #f8fafc; /* Light grey-blue background */
+        padding: 15px;
+        border-radius: 10px;
+        width: 250px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .resource-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2); /* Blue shadow */
+      }
+
+      .resource-card i {
+        font-size: 2.5rem;
+        color: #1e40af; /* Blue instead of cyan */
+        margin-bottom: 10px;
+      }
+
+      .resource-card h3 {
+        color: #1e40af; /* Blue instead of cyan */
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+      }
+
+      .resource-card .status {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+      }
+
+      .resource-card .status.in-stock {
+        background: rgba(46, 204, 113, 0.3); /* Kept green for distinction */
+        color: #333; /* Dark grey text */
+      }
+      .resource-card .status.low-stock {
+        background: rgba(255, 215, 0, 0.3); /* Kept yellow for distinction */
+        color: #333; /* Dark grey text */
+      }
+      .resource-card .status.out-of-stock {
+        background: rgba(231, 76, 60, 0.3); /* Kept red for distinction */
+        color: #333; /* Dark grey text */
+      }
+
+      .resource-card button {
+        background: #2563eb; /* Blue background */
+        color: #ffffff;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .resource-card button:hover {
+        background: #1e40af; /* Darker blue on hover */
+      }
+
+      .resource-card button:disabled {
+        background: #d1d5db; /* Light grey for disabled */
+        cursor: not-allowed;
+      }
+
+      .history-toggle {
+        background: #2563eb; /* Blue background */
+        color: #ffffff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin: 20px auto;
+        display: block;
+        transition: background 0.3s ease;
+      }
+
+      .history-toggle:hover {
+        background: #1e40af; /* Darker blue on hover */
+      }
+
+      .history-list {
+        display: none;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .history-card {
+        background: #f8fafc; /* Light grey-blue background */
+        padding: 15px;
+        border-radius: 10px;
+        transition: transform 0.3s ease;
+      }
+
+      .history-card:hover {
+        transform: scale(1.05);
+      }
+
+      .history-card p {
+        color: #64748b; /* Medium grey text */
+        margin: 5px 0;
+      }
+
+      .history-card .status {
+        font-weight: bold;
+      }
+
+      .history-card .status.pending {
+        color: #d4af37; /* Adjusted gold for day theme */
+      }
+      .history-card .status.approved {
+        color: #2563eb; /* Blue instead of cyan */
+      }
+      .history-card .status.delivered {
+        color: #2ecc71; /* Kept green for distinction */
+      }
+
+      .donate-btn {
+        background: #2563eb; /* Blue background */
+        color: #ffffff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin: 20px auto;
+        display: block;
+        transition: background 0.3s ease;
+      }
+
+      .donate-btn:hover {
+        background: #1e40af; /* Darker blue on hover */
+      }
+
+      #donateType option {
+        background-color: #ffffff; /* White background for options */
+        color: #333; /* Dark grey text */
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Kept semi-transparent overlay */
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background: #ffffff; /* White background */
+        width: 90%;
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid #d1d5db; /* Light grey border */
+        color: #333; /* Dark grey text */
+        position: relative;
+      }
+
+      .modal-content h3 {
+        color: #2563eb; /* Blue instead of cyan */
+        margin-bottom: 15px;
+        text-align: center;
+      }
+
+      .steps {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .step {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(37, 99, 235, 0.3); /* Blue background */
+        transition: background 0.3s ease;
+      }
+
+      .step.active {
+        background: #2563eb; /* Solid blue for active step */
+      }
+
+      .form-step {
+        display: none;
+      }
+
+      .form-step.active {
+        display: block;
+      }
+
+      .modal-content input,
+      .modal-content select,
+      .modal-content textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #d1d5db; /* Light grey border */
+        background: #f1f3f5; /* Light grey background */
+        color: #333; /* Dark grey text */
+      }
+
+      .modal-content button {
+        background: #2563eb; /* Blue background */
+        color: #ffffff;
+        padding: 10px 20px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        margin: 5px;
+      }
+
+      .modal-content button:hover {
+        background: #1e40af; /* Darker blue on hover */
+      }
+
+      .message {
+        text-align: center;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 20px 0;
+        display: none;
+      }
+
+      .message.success {
+        background: rgba(46, 204, 113, 0.3); /* Kept green for distinction */
+        color: #333; /* Dark grey text */
+      }
+
+      .message.error {
+        background: rgba(231, 76, 60, 0.3); /* Kept red for distinction */
+        color: #333; /* Dark grey text */
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          padding: 20px;
+        }
+
+        .resources-grid,
+        .history-list {
+          grid-template-columns: 1fr;
+        }
+
+        .modal-content {
+          width: 95%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Particle Background -->
+    <!-- <div id="particles-js"></div> -->
+
+    <!-- Sidebar -->
+    <div class="logo" onclick="window.location.href='/'">
+      <img src="/logo.png" alt="Pandemic Response Logo" class="logo-img" />
+    </div>
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-links">
+        <a href="/" class="sidebar-link"
+          ><i class="fa-solid fa-home"></i> Home</a
+        >
+        <a href="/firstPage" class="sidebar-link"
+          ><i class="fa-solid fa-virus"></i> Dashboard</a
+        >
+        <a href="/pandamic" class="sidebar-link"
+          ><i class="fa-solid fa-virus"></i> Pandemic Hub</a
+        >
+        <a href="/request" class="sidebar-link"
+          ><i class="fa-solid fa-box-open"></i> Need Resources</a
+        >
+        <a href="/map" class="sidebar-link"
+          ><i class="fa-solid fa-hospital"></i> Find Hospitals</a
+        >
+        <a href="/stats" class="sidebar-link"
+          ><i class="fa-solid fa-chart-pie"></i> Graph Analytics</a
+        >
+        <a href="/organizations" class="sidebar-link"
+          ><i class="fa-solid fa-building"></i> Organizations</a
+        >
+        <a href="/org-dashboard" class="sidebar-link"
+          ><i class="fa-solid fa-tachometer-alt"></i> Org Dashboard</a
+        >
+        <a href="/user-dashboard" class="sidebar-link"
+          ><i class="fa-solid fa-user"></i> User Dashboard</a
+        >
+        <a href="/profile" class="sidebar-link"
+          ><i class="fa-solid fa-id-card"></i> Profile</a
+        >
+      </div>
+      <div class="user-profile">
+        <img
+          src="/default-user.png"
+          alt="User Photo"
+          id="user-photo"
+          class="user-photo"
+          onclick="toggleSidebarMobile()"
+        />
+        <div class="user-info">
+          <span id="user-name">User Name</span>
+          <!-- <span id="user-email">user@example.com</span> -->
+        </div>
+        <button class="profile-btn" onclick="window.location.href='/profile'">
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+    <div class="mobile-toggle" onclick="toggleSidebarMobile()">
+      <i class="fa-solid fa-bars mobile-hamburger"></i>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="section-card">
+        <h2><i class="fa-solid fa-boxes"></i> Available Resources</h2>
+        <div class="resources-grid" id="resources-grid">
+          <!-- Populated via JavaScript -->
+        </div>
+      </div>
+
+      <button class="history-toggle" onclick="toggleHistory()">
+        My Requests
+      </button>
+      <div class="section-card history-list" id="history-list">
+        <!-- Populated via JavaScript -->
+      </div>
+
+      <button class="donate-btn" onclick="toggleDonateModal()">
+        Donate Resources
+      </button>
+
+      <div class="message" id="message"></div>
+    </main>
+
+    <!-- Request Modal -->
+    <div class="modal" id="request-modal">
+      <div class="modal-content">
+        <h3>Raise a Request</h3>
+        <div class="steps">
+          <div class="step active" data-step="1"></div>
+          <div class="step" data-step="2"></div>
+          <div class="step" data-step="3"></div>
+        </div>
+        <form id="request-form">
+          <div class="form-step active" data-step="1">
+            <input type="text" id="name" placeholder="Name" required />
+            <input
+              type="text"
+              id="contact"
+              placeholder="Contact Information"
+              required
+            />
+            <button type="button" onclick="nextStep(2)">Next</button>
+          </div>
+          <div class="form-step" data-step="2">
+            <select id="requestType" required>
+              <option value="">Select Resource...</option>
+              <option value="medical">Medical Supplies</option>
+              <option value="food">Food Assistance</option>
+              <option value="shelter">Shelter</option>
+            </select>
+            <textarea
+              id="description"
+              placeholder="Description"
+              rows="4"
+              required
+            ></textarea>
+            <input
+              type="number"
+              id="quantity"
+              placeholder="Quantity"
+              required
+            />
+            <button type="button" onclick="prevStep(1)">Back</button>
+            <button type="button" onclick="nextStep(3)">Next</button>
+          </div>
+          <div class="form-step" data-step="3">
+            <input type="text" id="location" placeholder="Location" required />
+            <button type="button" onclick="prevStep(2)">Back</button>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Donate Modal -->
+    <div class="modal" id="donate-modal">
+      <div class="modal-content">
+        <h3>Donate Resources</h3>
+        <form id="donate-form">
+          <select id="donateType" required>
+            <option value="">Select Resource...</option>
+            <option value="medical">Medical Supplies</option>
+            <option value="food">Food Assistance</option>
+            <option value="shelter">Shelter</option>
+          </select>
+          <input
+            type="number"
+            id="donateQuantity"
+            placeholder="Quantity"
+            required
+          />
+          <input
+            type="text"
+            id="donateLocation"
+            placeholder="Location"
+            required
+          />
+          <input
+            type="text"
+            id="donateContact"
+            placeholder="Contact Information"
+            required
+          />
+          <button type="button" onclick="toggleDonateModal()">Cancel</button>
+          <button type="submit">Donate</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Popup -->
+    <div class="popup" id="popup">
+      <span class="popup-text" id="popup-text"></span>
+      <button class="close-popup" id="close-popup">Close</button>
+    </div>
+
+    <script src="/sidebar.js"></script>
+    <script src="/firstPage.js"></script>
+    <script>
+      let currentStep = 1;
+
+      // Fetch Resources
+      async function fetchResources() {
+        try {
+          const response = await fetch("/api/resources");
+          const resources = await response.json();
+          const grid = document.getElementById("resources-grid");
+          grid.innerHTML = resources
+            .map(
+              (resource) => `
+                    <div class="resource-card">
+                        <i class="fa-solid fa-${
+                          resource.type === "medical"
+                            ? "medkit"
+                            : resource.type === "food"
+                            ? "utensils"
+                            : "home"
+                        }"></i>
+                        <h3>${
+                          resource.type.charAt(0).toUpperCase() +
+                          resource.type.slice(1)
+                        }</h3>
+                        <span class="status ${resource.status.replace(
+                          "_",
+                          "-"
+                        )}">${resource.status.replace("_", " ")}</span>
+                        <button onclick="openRequestModal('${
+                          resource.type
+                        }')" ${
+                resource.status === "out_of_stock" ? "disabled" : ""
+              }>Request Now</button>
+                    </div>
+                `
+            )
+            .join("");
+        } catch (error) {
+          console.error("Error fetching resources:", error);
+          showMessage("Error loading resources.", "error");
+        }
+      }
+
+      // Fetch Request History
+      async function fetchRequestHistory() {
+        try {
+          const email = localStorage.getItem("email") || "user@example.com"; // Mock email; replace with auth
+          const response = await fetch(
+            `/api/requests?userEmail=${encodeURIComponent(email)}`
+          );
+          const requests = await response.json();
+          const list = document.getElementById("history-list");
+          list.innerHTML =
+            requests
+              .map(
+                (req) => `
+                    <div class="history-card">
+                        <p><strong>Type:</strong> ${req.requestType}</p>
+                        <p><strong>Quantity:</strong> ${req.quantity}</p>
+                        <p><strong>Status:</strong> <span class="status ${
+                          req.status
+                        }">${req.status}</span></p>
+                        <p><strong>Date:</strong> ${new Date(
+                          req.createdAt
+                        ).toLocaleDateString()}</p>
+                    </div>
+                `
+              )
+              .join("") || "<p>No requests yet.</p>";
+        } catch (error) {
+          console.error("Error fetching request history:", error);
+          showMessage("Error loading request history.", "error");
+        }
+      }
+
+      // Toggle History
+      function toggleHistory() {
+        const list = document.getElementById("history-list");
+        list.style.display = list.style.display === "grid" ? "none" : "grid";
+        if (list.style.display === "grid") fetchRequestHistory();
+      }
+
+      // Open Request Modal
+      function openRequestModal(type) {
+        currentStep = 1;
+        updateSteps();
+        document.getElementById("request-modal").style.display = "block";
+        document.getElementById("requestType").value = type || "";
+      }
+
+      // Toggle Donate Modal
+      function toggleDonateModal() {
+        const modal = document.getElementById("donate-modal");
+        modal.style.display =
+          modal.style.display === "block" ? "none" : "block";
+      }
+
+      // Form Steps
+      function updateSteps() {
+        document.querySelectorAll(".step").forEach((step, index) => {
+          step.classList.toggle("active", index + 1 === currentStep);
+        });
+        document.querySelectorAll(".form-step").forEach((step) => {
+          step.classList.toggle(
+            "active",
+            parseInt(step.getAttribute("data-step")) === currentStep
+          );
+        });
+      }
+
+      function nextStep(step) {
+        if (validateStep(currentStep)) {
+          currentStep = step;
+          updateSteps();
+        }
+      }
+
+      function prevStep(step) {
+        currentStep = step;
+        updateSteps();
+      }
+
+      function validateStep(step) {
+        const inputs = document
+          .querySelector(`.form-step[data-step="${step}"]`)
+          .querySelectorAll("input, select, textarea");
+        return Array.from(inputs).every((input) => input.value.trim() !== "");
+      }
+
+      // Submit Request
+      document
+        .getElementById("request-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          if (!validateStep(3)) return;
+
+          const email = localStorage.getItem("email") || "user@example.com"; // Mock; replace with auth
+          const requestData = {
+            name: document.getElementById("name").value.trim(),
+            contact: document.getElementById("contact").value.trim(),
+            requestType: document.getElementById("requestType").value,
+            description: document.getElementById("description").value.trim(),
+            quantity: parseInt(document.getElementById("quantity").value),
+            location: document.getElementById("location").value.trim(),
+            userEmail: email,
+          };
+
+          try {
+            const response = await fetch("/api/requests", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(requestData),
+            });
+            const result = await response.json();
+            if (response.ok) {
+              showMessage(
+                `Request for ${requestData.quantity} ${requestData.requestType} submitted!`,
+                "success"
+              );
+              document.getElementById("request-modal").style.display = "none";
+              document.getElementById("request-form").reset();
+              fetchResources(); // Refresh resources
+              if (
+                document.getElementById("history-list").style.display === "grid"
+              )
+                fetchRequestHistory();
+            } else {
+              showMessage(`Error: ${result.message}`, "error");
+            }
+          } catch (error) {
+            showMessage(`Error: ${error.message}`, "error");
+          }
+        });
+
+      // Submit Donation
+      document
+        .getElementById("donate-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const donateData = {
+            type: document.getElementById("donateType").value,
+            quantity: parseInt(document.getElementById("donateQuantity").value),
+            location: document.getElementById("donateLocation").value.trim(),
+            contact: document.getElementById("donateContact").value.trim(),
+          };
+
+          try {
+            const response = await fetch("/api/donations", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(donateData),
+            });
+            const result = await response.json();
+            if (response.ok) {
+              showMessage(
+                `Donation of ${donateData.quantity} ${donateData.type} submitted!`,
+                "success"
+              );
+              toggleDonateModal();
+              document.getElementById("donate-form").reset();
+              fetchResources(); // Refresh resources
+            } else {
+              showMessage(`Error: ${result.message}`, "error");
+            }
+          } catch (error) {
+            showMessage(`Error: ${error.message}`, "error");
+          }
+        });
+
+      // Show Message
+      function showMessage(text, type) {
+        const message = document.getElementById("message");
+        message.textContent = text;
+        message.className = `message ${type}`;
+        message.style.display = "block";
+        setTimeout(() => {
+          message.style.display = "none";
+          message.className = "message";
+        }, 5000);
+      }
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchResources();
+        particlesJS("particles-js", {
+          particles: {
+            number: { value: 50 },
+            color: { value: "#00ffff" },
+            size: { value: 3 },
+            line_linked: { enable: false },
+          },
+          interactivity: {
+            detect_on: "canvas",
+            events: { onhover: { enable: true, mode: "repulse" } },
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

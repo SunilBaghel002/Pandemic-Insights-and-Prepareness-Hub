@@ -1,0 +1,163 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    font-family: "Poppins", sans-serif;
+
+}
+
+body {
+    background-color: #dcedc8; /* Light green background */
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    text-align: center;
+    color: #388e3c; /* Dark green color */
+}
+
+.resources-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.resource-category {
+    flex: 1 1 30%;
+    margin: 10px;
+}
+
+.resource-card {
+    background: #c8e6c9; /* Light green card */
+    border: 1px solid #a5d6a7; /* Slightly darker green border */
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.resource-card img {
+    width: 60px;
+    height: 60px;
+}
+
+.resource-card:hover {
+    box-shadow: 0 0 20px rgba(56, 142, 60, 0.5);
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input, select, textarea {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    /* margin-left: 30px; */
+}
+.submit{
+    /* padding-right:310px; */
+    width: 90%;
+    margin-left: 15px;
+    padding: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #388e3c; /* Dark green */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2e7d32; /* Darker green on hover */
+}
+
+.request-form-container {
+    display: none; /* Initially hidden */
+    margin-top: 20px;
+    opacity: 0;
+    margin-left:60px ;
+    /* display: flex; */
+    /* justify-content: center;
+    align-items: center;
+    flex-direction: column; */
+    transform: translateY(-20px);
+    transition: opacity 3s ease, transform 3s ease;
+}
+
+.request-form-container.visible {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+.message {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 18px;
+    color: green;
+}
+
+.hospitals-list {
+    margin-top: 20px;
+}
+
+.hospital-card {
+    background: #f8f9fa; /* Light gray background */
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    transition: transform 0.3s;
+}
+
+.hospital-card:hover {
+    transform: scale(1.02);
+}
+
+.raise{
+    display:flex ;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+}
+#showFormButton{
+    width: 40%;
+}
+.slide-down{
+    animation: slide-down 1s ease-in;
+    display: block;
+    opacity: 1;
+}
+@keyframes slide-down{
+    0%{
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100%{
+        opacity: 1;
+        transform: translateY(0px)
+    }
+}
