@@ -7,7 +7,6 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
@@ -18,6 +17,7 @@
       body {
         position: relative;
         overflow-x: hidden;
+        background: #f0f2f5; /* Light gray background */
       }
 
       #particles-js {
@@ -34,18 +34,23 @@
       }
 
       .section-card {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(
+          255,
+          255,
+          255,
+          0.9
+        ); /* White with slight transparency */
         padding: 20px;
         border-radius: 15px;
-        border: 1px solid rgba(0, 255, 255, 0.2);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(0, 0, 128, 0.2); /* Navy blue border */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Lighter shadow */
         margin-bottom: 20px;
         animation: fadeIn 0.5s ease-in-out;
       }
 
       .section-card h2 {
         font-size: 2rem;
-        color: #00ffff;
+        color: #000080; /* Navy blue */
         margin-bottom: 15px;
         text-align: center;
       }
@@ -66,7 +71,7 @@
 
       .resource-card,
       .donation-card {
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(255, 255, 255, 0.95); /* Nearly solid white */
         padding: 15px;
         border-radius: 10px;
         text-align: center;
@@ -81,20 +86,20 @@
       .resource-card i,
       .donation-card i {
         font-size: 2.5rem;
-        color: #00ffff;
+        color: #000080; /* Navy blue */
         margin-bottom: 10px;
       }
 
       .resource-card h3,
       .donation-card h3 {
-        color: #00ffff;
+        color: #000080; /* Navy blue */
         font-size: 1.2rem;
         margin-bottom: 5px;
       }
 
       .resource-card p,
       .donation-card p {
-        color: #ddd;
+        color: #333; /* Dark gray for readability */
         margin: 5px 0;
       }
 
@@ -103,23 +108,24 @@
         padding: 5px 10px;
         border-radius: 15px;
         font-size: 0.9rem;
+        color: #333; /* Dark gray text */
       }
 
       .status.in-stock,
       .status.available {
-        background: rgba(46, 204, 113, 0.3);
+        background: rgba(46, 204, 113, 0.5); /* Slightly opaque green */
       }
       .status.low-stock {
-        background: rgba(255, 215, 0, 0.3);
+        background: rgba(255, 215, 0, 0.5); /* Slightly opaque yellow */
       }
       .status.out-of-stock,
       .status.claimed {
-        background: rgba(231, 76, 60, 0.3);
+        background: rgba(231, 76, 60, 0.5); /* Slightly opaque red */
       }
 
       .action-btn {
-        background: rgba(0, 255, 255, 0.3);
-        color: #fff;
+        background: rgba(0, 0, 128, 0.7); /* Navy blue background */
+        color: #fff; /* White text for contrast */
         padding: 8px 15px;
         border: none;
         border-radius: 8px;
@@ -129,7 +135,7 @@
       }
 
       .action-btn:hover {
-        background: rgba(0, 255, 255, 0.5);
+        background: rgba(0, 0, 128, 1); /* Solid navy blue */
       }
 
       .table-header,
@@ -141,14 +147,14 @@
       .table-row div {
         display: table-cell;
         padding: 10px;
-        border-bottom: 1px solid rgba(0, 255, 255, 0.2);
-        color: #ddd;
+        border-bottom: 1px solid rgba(0, 0, 128, 0.2); /* Navy blue border */
+        color: #333; /* Dark gray */
       }
 
       .table-header div {
-        background: rgba(0, 255, 255, 0.1);
+        background: rgba(0, 0, 128, 0.15); /* Light navy blue */
         font-weight: bold;
-        color: #00ffff;
+        color: #000080; /* Navy blue */
       }
 
       .filter {
@@ -161,9 +167,9 @@
         flex: 1;
         padding: 10px;
         border-radius: 5px;
-        border: 1px solid rgba(0, 255, 255, 0.2);
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
+        border: 1px solid rgba(0, 0, 128, 0.2); /* Navy blue border */
+        background: rgba(255, 255, 255, 0.8);
+        color: #333; /* Dark gray */
       }
 
       .modal {
@@ -173,23 +179,23 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.5); /* Lighter overlay */
         z-index: 1000;
       }
 
       .modal-content {
-        background: rgba(0, 0, 0, 0.9);
+        background: rgba(255, 255, 255, 0.95); /* Nearly solid white */
         width: 90%;
         max-width: 600px;
         margin: 50px auto;
         padding: 20px;
         border-radius: 15px;
-        border: 1px solid rgba(0, 255, 255, 0.2);
-        color: #fff;
+        border: 1px solid rgba(0, 0, 128, 0.2); /* Navy blue border */
+        color: #333; /* Dark gray */
       }
 
       .modal-content h3 {
-        color: #00ffff;
+        color: #000080; /* Navy blue */
         margin-bottom: 15px;
       }
 
@@ -203,20 +209,20 @@
         padding: 10px;
         margin-bottom: 10px;
         border-radius: 5px;
-        border: 1px solid rgba(0, 255, 255, 0.2);
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
+        border: 1px solid rgba(0, 0, 128, 0.2); /* Navy blue border */
+        background: rgba(255, 255, 255, 0.8);
+        color: #333; /* Dark gray */
       }
 
       .modal-content .close {
         float: right;
         font-size: 24px;
         cursor: pointer;
-        color: #00ffff;
+        color: #000080; /* Navy blue */
       }
 
       .error-message {
-        color: #ff5555;
+        color: #ff3333; /* Bright red */
         text-align: center;
         margin: 20px 0;
       }
