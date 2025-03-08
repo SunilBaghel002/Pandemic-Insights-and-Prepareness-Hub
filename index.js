@@ -22,7 +22,8 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Middleware
 app.use(express.json());
-app.use(express.static("public"));
+// app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Multer Configuration
 const storage = multer.diskStorage({
