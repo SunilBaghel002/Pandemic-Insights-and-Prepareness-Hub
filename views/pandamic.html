@@ -11,8 +11,9 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link rel="stylesheet" href="/firstPage.css" />
-    <link rel="stylesheet" href="/sidebar.css" />
+    <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/firstPage.css" />
+    <link rel="stylesheet" href="/css/sidebar.css" />
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
       /* Page-Specific Styles */
@@ -459,7 +460,7 @@
 
     <!-- Sidebar -->
     <div class="logo" onclick="window.location.href='/'">
-      <img src="/logo.png" alt="Pandemic Response Logo" class="logo-img" />
+      <img src="/images/logo.png" alt="Pandemic Response Logo" class="logo-img" />
     </div>
     <div class="sidebar" id="sidebar">
       <div class="sidebar-links">
@@ -683,8 +684,8 @@
       </div>
     </div>
 
-    <script src="/sidebar.js"></script>
-    <script src="/firstPage.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/firstPage.js"></script>
     <script>
       const apiKey = "ff96b9f361a74304950aeff92e607e7e"; // Replace with your News API key
       let pollVotes = { yes: 0, no: 0 };
@@ -725,7 +726,7 @@
             title: article.title,
             description: article.description || "No description available.",
             url: article.url,
-            image: article.urlToImage || "https://via.placeholder.com/300",
+            image: article.urlToImage || "https://thumbs.dreamstime.com/b/news-newspapers-folded-stacked-word-wooden-block-puzzle-dice-concept-newspaper-media-press-release-42301371.jpg",
             date: new Date(article.publishedAt).toLocaleDateString(),
             source: article.source.name,
             category: categorizeNews(article.title + " " + article.description),
@@ -762,7 +763,7 @@
           card.innerHTML = `
                     <img src="${article.image}" alt="${
             article.title
-          }" onerror="this.src='https://via.placeholder.com/300'">
+          }" onerror="this.src='https://thumbs.dreamstime.com/b/news-newspapers-folded-stacked-word-wooden-block-puzzle-dice-concept-newspaper-media-press-release-42301371.jpg'">
                     <h3>${article.title}</h3>
                     <p>${article.description}</p>
                     <div class="source-date">${article.source} - ${
@@ -834,7 +835,7 @@
             title,
             description,
             url: "#",
-            image: "https://via.placeholder.com/300",
+            image: "https://thumbs.dreamstime.com/b/news-newspapers-folded-stacked-word-wooden-block-puzzle-dice-concept-newspaper-media-press-release-42301371.jpg",
             date: new Date().toLocaleDateString(),
             source: "User Submission",
             category: categorizeNews(title + " " + description),
