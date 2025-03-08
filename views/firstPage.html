@@ -7,15 +7,15 @@
   <title>Pandemic Response - Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="firstPage.css" />
-  <link rel="stylesheet" href="sidebar.css" />
-  <link rel="stylesheet" href="weather.css">
+  <link rel="stylesheet" href="/css/firstPage.css" />
+  <link rel="stylesheet" href="/css/sidebar.css" />
+  <link rel="stylesheet" href="/css/weather.css">
 </head>
 
 <body>
   <!-- Sidebar (Consistent Across All Pages) -->
   <div class="logo" onclick="window.location.href='/'">
-    <img src="/logo.png" alt="Pandemic Response Logo" class="logo-img" />
+    <img src="/images/logo.png" alt="Pandemic Response Logo" class="logo-img" />
   </div>
   <div class="sidebar" id="sidebar">
     <div class="sidebar-links">
@@ -31,7 +31,7 @@
       <a href="/profile" class="sidebar-link"><i class="fa-solid fa-id-card"></i> Profile</a>
     </div>
     <div class="user-profile">
-      <img src="/default-user.png" alt="User Photo" id="user-photo" class="user-photo"
+      <img src="/images/logohaire.png" alt="User Photo" id="user-photo" class="user-photo"
         onclick="toggleSidebarMobile()" />
       <div class="user-info">
         <span id="user-name">User Name</span>
@@ -66,7 +66,7 @@
         </button>
       </div>
       <div class="hero-image">
-        <img src="/cover.png" alt="Pandemic Response" />
+        <img src="/images/cover.png" alt="Pandemic Response" />
       </div>
     </section>
 
@@ -360,9 +360,9 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/scrollreveal"></script>
-  <script src="sidebar.js"></script>
-  <script src="firstPage.js"></script>
-  <script src="weather.js"></script>
+  <script src="/js/sidebar.js"></script>
+  <script src="/js/firstPage.js"></script>
+  <script src="/js/weather.js"></script>
 </body>
 
 </html>
