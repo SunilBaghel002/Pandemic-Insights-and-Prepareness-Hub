@@ -13,6 +13,7 @@ body {
   color: #333;
   line-height: 1.6;
   overflow-x: hidden;
+  position: relative;
 }
 
 /* Custom Scrollbar */
@@ -405,6 +406,7 @@ body {
   position: fixed;
   top: 50%;
   left: 50%;
+  /* z-index: 8; */
   transform: translate(-50%, -50%);
   background: rgba(255, 255, 255, 0.95);
   padding: 20px 30px;
@@ -418,7 +420,16 @@ body {
   border: 1px solid rgba(37, 99, 235, 0.2); /* Adjusted blue */
   animation: popupFadeIn 0.3s ease-in-out;
 }
-
+.grey{
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  background-color: #666;
+  top: 0;
+  left: 0;
+  display: none;
+}
 @keyframes popupFadeIn {
   from {
     opacity: 0;
@@ -679,7 +690,9 @@ body {
     padding: 60px 20px 20px;
     text-align: center;
   }
-
+  .hero-content{
+    margin-top: 100px;
+  }
   .hero-content h1 {
     font-size: 2rem;
   }
@@ -954,6 +967,12 @@ body {
 
   .dashboard-section {
     padding: 60px 20px 20px;
+  }
+  .dashboard-section h2{
+    margin-top: 100px;
+  }
+  .org-listing h2{
+    margin-top: 100px;
   }
 
   .dashboard-grid {

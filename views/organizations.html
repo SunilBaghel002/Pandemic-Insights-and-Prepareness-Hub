@@ -10,8 +10,9 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link rel="stylesheet" href="/firstPage.css" />
-    <link rel="stylesheet" href="/sidebar.css" />
+    <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/firstPage.css" />
+    <link rel="stylesheet" href="/css/sidebar.css" />
     <style>
       #location-filter option{
         background-color: black;
@@ -22,7 +23,7 @@
   <body>
     <!-- Sidebar (Consistent Across All Pages) -->
     <div class="logo" onclick="window.location.href='/'">
-      <img src="/logo.png" alt="Pandemic Response Logo" class="logo-img" />
+      <img src="/images/logo.png" alt="Pandemic Response Logo" class="logo-img" />
     </div>
     <div class="sidebar" id="sidebar">
       <div class="sidebar-links">
@@ -330,14 +331,14 @@
         </div>
       </footer>
     </main>
-
+    <div class="grey"></div>
     <div class="popup" id="popup">
       <span class="popup-text" id="popup-text"></span>
       <button class="close-popup" id="close-popup">Close</button>
     </div>
 
     <script src="https://unpkg.com/scrollreveal"></script>
-    <script src="/sidebar.js"></script>
-    <script src="/firstPage.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script src="/js/firstPage.js"></script>
   </body>
 </html>

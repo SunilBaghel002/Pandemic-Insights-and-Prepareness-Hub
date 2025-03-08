@@ -9,10 +9,16 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const WebSocket = require('ws');
+const cors = require('cors');
 
 dotenv.config();
 const app = express();
 
+app.use(cors({ 
+  origin: 'https://pandemic-insights-and-prepareness-hub.vercel.app', // Allow your frontend URL
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true
+}));
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, "public", "uploads");
 if (!fs.existsSync(uploadsDir)) {
