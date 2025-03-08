@@ -11,13 +11,14 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"
     />
-    <link rel="stylesheet" href="/firstPage.css" />
-    <link rel="stylesheet" href="/sidebar.css" />
+    <link rel="stylesheet" href="/css/firstPage.css" />
+    <link rel="stylesheet" href="/css/sidebar.css" />
     <style>
       /* Map-Specific Styles */
       .map-section {
@@ -278,7 +279,7 @@
   <body>
     <!-- Sidebar -->
     <div class="logo" onclick="window.location.href='/'">
-      <img src="/logo.png" alt="Pandemic Response Logo" class="logo-img" />
+      <img src="/images/logo.png" alt="Pandemic Response Logo" class="logo-img" />
     </div>
     <div class="sidebar" id="sidebar">
       <div class="sidebar-links" id="sidebar-links">
@@ -405,7 +406,7 @@
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
-    <script src="/sidebar.js"></script>
+    <script src="/js/sidebar.js"></script>
     <script>
       let map, marker, routingControl;
       let currentLat, currentLon;
@@ -421,12 +422,12 @@
       ];
 
       const hospitalIcon = L.icon({
-        iconUrl: "/hospital.png",
+        iconUrl: "/images/hospital.png",
         iconSize: [32, 32],
         iconAnchor: [16, 32],
       });
       const highlightedIcon = L.icon({
-        iconUrl: "/hospital.png",
+        iconUrl: "/images/hospital.png",
         iconSize: [40, 40],
         iconAnchor: [20, 40],
       });

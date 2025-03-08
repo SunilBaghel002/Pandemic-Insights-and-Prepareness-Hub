@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hospital Dashboard - Pandemic Response</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-papK4lMGcp0W2w6urVChD+2djA2y6KxR4hqJ95y7o+cHDPCfz1pXlRx3d72t6uR/ZlS0R6k2lxHlV4k+oLU3rQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="/firstPage.css" />
-    <link rel="stylesheet" href="/sidebar.css" />
+    <link rel="stylesheet" href="/css/firstPage.css" />
+    <link rel="stylesheet" href="/css/sidebar.css" />
+    <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon" />
     <style>
         /* Alert List Styles */
         .alert-list {
@@ -60,7 +61,7 @@
 <body>
     <!-- Sidebar -->
     <div class="logo" onclick="window.location.href='/'">
-        <img src="/logo.png" alt="Pandemic Response Logo" class="logo-img" />
+        <img src="/images/logo.png" alt="Pandemic Response Logo" class="logo-img" />
     </div>
     <div class="sidebar" id="sidebar">
         <div class="sidebar-links" id="sidebar-links">
@@ -102,7 +103,7 @@
         <div class="alert-list" id="alert-list"></div>
     </main>
 
-    <script src="/sidebar.js"></script>
+    <script src="/js/sidebar.js"></script>
     <script>
         const ws = new WebSocket('ws://localhost:5000');
         const allowedEmails = ["sunilnp@acem.edu.in", "ofcsatyam007@gmail.com", "vanshajs11@gmail.com"];
