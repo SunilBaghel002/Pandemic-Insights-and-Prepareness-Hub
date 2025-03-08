@@ -147,7 +147,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_PASS },
 });
-
+app.set("views", path.join(__dirname, "views"));
 // Routes
 app.get("/", (req, res) =>
   res.sendFile(path.join(__dirname, "/views/home.html"))
