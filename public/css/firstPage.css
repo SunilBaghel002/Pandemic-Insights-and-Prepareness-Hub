@@ -1,5 +1,5 @@
 /* styles.css */
-@import url("https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 * {
   margin: 0;
@@ -13,7 +13,6 @@ body {
   color: #333;
   line-height: 1.6;
   overflow-x: hidden;
-  position: relative;
 }
 
 /* Custom Scrollbar */
@@ -140,9 +139,7 @@ body {
 .hero-image img {
   max-width: 100%;
   border-radius: 15px;
-  filter: drop-shadow(
-    10px 20px 90px rgba(37, 99, 235, 0.2)
-  ); /* Adjusted blue */
+  filter: drop-shadow(10px 20px 90px rgba(37, 99, 235, 0.2)); /* Adjusted blue */
   transition: transform 0.3s ease;
 }
 
@@ -448,16 +445,6 @@ body {
   cursor: pointer;
   transition: background 0.3s ease;
 }
-.grey {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  z-index: 2;
-  background-color: #666;
-  top: 0;
-  left: 0;
-  display: none;
-}
 
 .close-popup:hover {
   background: rgba(30, 64, 175, 0.9); /* Adjusted to match #1e40af */
@@ -692,9 +679,7 @@ body {
     padding: 60px 20px 20px;
     text-align: center;
   }
-  .hero-content {
-    margin-top: 100px;
-  }
+
   .hero-content h1 {
     font-size: 2rem;
   }
@@ -969,12 +954,6 @@ body {
 
   .dashboard-section {
     padding: 60px 20px 20px;
-  }
-  .dashboard-section h2 {
-    margin-top: 100px;
-  }
-  .org-listing h2 {
-    margin-top: 100px;
   }
 
   .dashboard-grid {

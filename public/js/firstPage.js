@@ -6,12 +6,10 @@ let pieChartInstance = null;
 const popup = document.getElementById("popup");
 const popupText = document.getElementById("popup-text");
 const closePopupButton = document.getElementById("close-popup");
-const greyFilter = document.querySelector(".grey");
 
 if (closePopupButton) {
   closePopupButton.addEventListener("click", () => {
     popup.style.display = "none";
-    greyFilter.style.display = "none";
   });
 }
 
@@ -19,11 +17,7 @@ function showPopupMessage(message) {
   if (popupText && popup) {
     popupText.textContent = message;
     popup.style.display = "flex";
-    greyFilter.style.display = "flex";
-    setTimeout(() => {
-      popup.style.display = "none";
-      greyFilter.style.display = "none";
-    }, 3000);
+    setTimeout(() => (popup.style.display = "none"), 3000);
   } else {
     console.error("Popup elements not found");
   }
@@ -639,9 +633,9 @@ async function joinOrganization(orgId) {
     showPopupMessage("Error during join request.");
   }
 }
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", ()=>{
   loadOrgDashboard();
-});
+})
 // Org Dashboard Functions
 async function loadOrgDashboard() {
   const token = localStorage.getItem("token");
@@ -831,9 +825,9 @@ async function handleOrgProfileSubmit(e) {
     showPopupMessage("Error updating profile.");
   }
 }
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", ()=>{
   loadUserDashboard();
-});
+})
 // User Dashboard Functions
 async function loadUserDashboard() {
   const token = localStorage.getItem("token");
@@ -910,6 +904,6 @@ async function loadUserDashboard() {
     }
   } catch (err) {
     console.error("Error loading dashboard:", err);
-    console.log("Failed to load dashboard.");
+    showPopupMessage("Failed to load dashboard.");
   }
 }
