@@ -59,6 +59,45 @@ document.addEventListener("click", (e) => {
         sidebar.classList.remove("active");
     }
 });
+// sidebar.js (partial example)
+// Updated sidebar.js
+document.addEventListener("DOMContentLoaded", () => {
+    const userNameElement = document.getElementById("user-name");
+    if (!userNameElement) {
+      console.error("Element with ID 'user-name' not found in the DOM");
+      return;
+    }
+  
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("No token found, redirecting to login");
+      window.location.href = "/login";
+      return;
+    }
+  
+    fetch("http://localhost:5000/api/user/profile", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        userNameElement.textContent = data.name || "User Name";
+      })
+      .catch((error) => {
+        console.error("Error fetching user profile:", error);
+        userNameElement.textContent = "Guest"; // Fallback
+      });
+  });
+  
+  // Toggle sidebar for mobile (assuming this is also in sidebar.js)
+  function toggleSidebarMobile() {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("active");
+  }
 
 // Initialize on Page Load
 window.addEventListener("load", () => {

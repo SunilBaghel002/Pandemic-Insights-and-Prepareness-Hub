@@ -982,3 +982,94 @@ body {
     margin-top: 100px;
   }
 }
+.tutorial-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 3000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.tutorial-box {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  max-width: 500px;
+  text-align: center;
+  animation: popupFadeIn 0.3s ease-in-out;
+}
+
+.tutorial-box h3 {
+  font-size: 1.8rem;
+  color: #1e40af;
+  margin-bottom: 15px;
+}
+
+.tutorial-box p {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.tutorial-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.tutorial-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.gotcha-btn {
+  background: rgba(37, 99, 235, 0.8);
+  color: #fff;
+}
+
+.gotcha-btn:hover {
+  background: rgba(30, 64, 175, 0.9);
+  transform: scale(1.05);
+}
+
+.skip-btn {
+  background: rgba(200, 200, 200, 0.8);
+  color: #333;
+}
+
+.skip-btn:hover {
+  background: rgba(150, 150, 150, 0.9);
+  transform: scale(1.05);
+}
+
+.highlight {
+  position: relative;
+  z-index: 3100;
+  box-shadow: 0 0 20px 10px rgba(37, 99, 235, 0.5);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .tutorial-box {
+    max-width: 90%;
+    padding: 20px;
+  }
+  .tutorial-box h3 {
+    font-size: 1.5rem;
+  }
+  .tutorial-box p {
+    font-size: 1rem;
+  }
+}

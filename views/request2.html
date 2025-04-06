@@ -3,23 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Crisis Aid Navigator - Request Resources</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/css/firstPage.css" />
-    <link rel="stylesheet" href="/css/sidebar.css" />
+    <title>Crisis Aid Navigator</title>
     <style>
       :root {
         --primary-color: #4361ee;
@@ -842,82 +826,6 @@
         height: 16px;
       }
 
-      /* File upload style */
-      .file-upload {
-        border: 2px dashed var(--border-color);
-        border-radius: var(--border-radius-md);
-        padding: 20px;
-        text-align: center;
-        position: relative;
-        cursor: pointer;
-        transition: all 0.3s;
-      }
-
-      .file-upload:hover {
-        border-color: var(--primary-color);
-        background-color: rgba(67, 97, 238, 0.05);
-      }
-
-      .file-upload i {
-        font-size: 2rem;
-        color: var(--primary-color);
-        margin-bottom: 10px;
-      }
-
-      .file-upload p {
-        color: var(--text-light);
-        margin-bottom: 5px;
-      }
-
-      .file-upload input[type="file"] {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        cursor: pointer;
-      }
-
-      .file-preview {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-top: 15px;
-        padding: 10px;
-        background-color: rgba(67, 97, 238, 0.1);
-        border-radius: var(--border-radius-md);
-        animation: fadeIn 0.3s;
-      }
-
-      .file-preview img {
-        width: 40px;
-        height: 40px;
-        object-fit: cover;
-        border-radius: 4px;
-      }
-
-      .file-preview .file-info {
-        flex: 1;
-      }
-
-      .file-preview .file-name {
-        font-weight: 500;
-        font-size: 0.9rem;
-      }
-
-      .file-preview .file-size {
-        color: var(--text-light);
-        font-size: 0.8rem;
-      }
-
-      .file-preview button {
-        background: none;
-        border: none;
-        color: var(--error-color);
-        cursor: pointer;
-      }
-
       .form-buttons {
         display: flex;
         justify-content: flex-end;
@@ -1227,35 +1135,6 @@
         margin: 0;
       }
 
-      /* Loading Spinner */
-      .spinner-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 2000;
-      }
-
-      .spinner {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        border: 5px solid rgba(255, 255, 255, 0.3);
-        border-top-color: var(--primary-color);
-        animation: spin 1s infinite linear;
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
       /* Footer */
       footer {
         background-color: #1a237e;
@@ -1357,9 +1236,6 @@
         font-size: 0.9rem;
         color: rgba(255, 255, 255, 0.7);
       }
-      .quantity-input{
-        width: 50px !important;
-      }
 
       /* Animations */
       @keyframes fadeIn {
@@ -1430,18 +1306,6 @@
       @media (max-width: 768px) {
         .nav-links {
           display: none;
-          position: absolute;
-          top: 100%;
-          left: 0;
-          right: 0;
-          background-color: var(--primary-color);
-          flex-direction: column;
-          padding: 20px;
-          box-shadow: var(--shadow-md);
-        }
-
-        .nav-links.open {
-          display: flex;
         }
 
         .hamburger {
@@ -1465,8 +1329,8 @@
           font-size: 0.7rem;
         }
 
-        .form-container {
-          width: 95%;
+        .checkout-step-content {
+          padding: 20px;
         }
 
         .form-grid {
@@ -1480,123 +1344,56 @@
         .form-buttons button {
           width: 100%;
         }
+
+        .footer-content {
+          grid-template-columns: 1fr;
+        }
       }
 
-      @media (max-width: 576px) {
+      @media (max-width: 480px) {
         .header-content h1 {
           font-size: 2rem;
         }
 
-        .header-content p {
-          font-size: 1rem;
+        .resource-list {
+          grid-template-columns: 1fr;
         }
 
-        .category-tabs {
-          width: 100%;
-          overflow-x: auto;
-          padding-bottom: 10px;
+        .checkout-steps {
+          flex-wrap: wrap;
+          gap: 10px;
         }
 
-        .category-tabs::-webkit-scrollbar {
-          height: 4px;
+        .step {
+          flex: 0 0 calc(50% - 10px);
+          margin-bottom: 10px;
         }
 
-        .category-tabs::-webkit-scrollbar-thumb {
-          background: var(--border-color);
-          border-radius: 10px;
-        }
-
-        .tab-btn {
-          white-space: nowrap;
-        }
-
-        .checkout-step-content {
-          padding: 20px 15px;
-        }
-
-        .review-info-row {
-          flex-direction: column;
-          margin-bottom: 15px;
-        }
-
-        .review-info-label {
-          margin-bottom: 5px;
+        .step::before {
+          display: none;
         }
 
         .payment-option {
-          flex-wrap: wrap;
+          flex-direction: column;
+          align-items: flex-start;
         }
 
         .payment-icons {
           margin-top: 10px;
-          width: 100%;
-          justify-content: center;
         }
       }
     </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
-    <!-- Sidebar -->
-    <div class="logo" onclick="window.location.href='/'">
-      <img src="/images/logo.png" alt="Pandemic Response Logo" class="logo-img" />
-    </div>
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-links" id="sidebar-links">
-        <a href="/" class="sidebar-link"
-          ><i class="fa-solid fa-home"></i> Home</a
-        >
-        <a href="/firstPage" class="sidebar-link"
-          ><i class="fa-solid fa-virus"></i> Dashboard</a
-        >
-        <a href="/pandamic" class="sidebar-link"
-          ><i class="fa-solid fa-virus"></i> Live Pandemic Stats</a
-        >
-        <a href="/request" class="sidebar-link"
-          ><i class="fa-solid fa-box-open"></i> Need Resources</a
-        >
-        <a href="/map" class="sidebar-link"
-          ><i class="fa-solid fa-hospital"></i> Find Hospitals</a
-        >
-        <a href="/stats" class="sidebar-link"
-          ><i class="fa-solid fa-chart-pie"></i> Graph Analytics</a
-        >
-        <a href="/organizations" class="sidebar-link"
-          ><i class="fa-solid fa-building"></i> Organizations</a
-        >
-        <a href="/org-dashboard" class="sidebar-link"
-          ><i class="fa-solid fa-tachometer-alt"></i> Org Dashboard</a
-        >
-        <a href="/user-dashboard" class="sidebar-link"
-          ><i class="fa-solid fa-user"></i> User Dashboard</a
-        >
-        <a href="/alerts" class="sidebar-link"
-        ><i class="fa-solid fa-alert"></i> Alerts</a
-      >
-        <a href="/profile" class="sidebar-link"
-          ><i class="fa-solid fa-id-card"></i> Profile</a
-        >
-      </div>
-      <div class="user-profile">
-        <img
-          src="/default-user.png"
-          alt="User Photo"
-          id="user-photo"
-          class="user-photo"
-          onclick="toggleSidebarMobile()"
-        />
-        <div class="user-info">
-          <span id="user-name">User Name</span>
-          <span id="user-email">user@example.com</span>
-        </div>
-        <button class="profile-btn" onclick="window.location.href='/profile'">
-          <i class="fa-solid fa-arrow-right"></i>
-        </button>
-      </div>
-    </div>
-    <div class="mobile-toggle" onclick="toggleSidebarMobile()">
-      <i class="fa-solid fa-bars mobile-hamburger"></i>
-    </div>
     <div class="floating-shapes">
       <div class="shape shape1"></div>
       <div class="shape shape2"></div>
@@ -1609,14 +1406,13 @@
       <nav>
         <div class="nav-logo">
           <i class="fas fa-heartbeat"></i>
-          <span>PIPH</span>
+          <span>CrisisAid</span>
         </div>
         <div class="nav-links">
-          <a href="/">Home</a>
-          <a href="/request" class="active">Request Resources</a>
-          <a href="/about">About</a>
-          <a href="/help">Help</a>
-          <a href="/contact">Contact</a>
+          <a href="#" class="active">Home</a>
+          <a href="#">About</a>
+          <a href="#">Help</a>
+          <a href="#">Contact</a>
         </div>
         <div class="nav-cart">
           <i class="fas fa-shopping-cart" id="cart-icon"></i>
@@ -1629,7 +1425,7 @@
         </div>
       </nav>
       <div class="header-content">
-        <h1>PIPH </h1>
+        <h1>Crisis Aid Navigator</h1>
         <p>Essential resources at minimal cost during pandemic crisis</p>
         <button class="cta-button" onclick="scrollToResources()">
           Browse Resources
@@ -1745,19 +1541,12 @@
 
               <div class="form-group">
                 <label for="email">Email<span class="required">*</span></label>
-                <input
-                  type="email"
-                  id="email"
-                  placeholder="example@gmail.com"
-                  required
-                />
+                <input type="email" id="email" placeholder="example@gmail.com" required />
                 <div class="error-message" id="email-error"></div>
               </div>
 
               <div class="form-group">
-                <label for="aadhar"
-                  >Aadhar Number<span class="required">*</span></label
-                >
+                <label for="aadhar">Aadhar Number<span class="required">*</span></label>
                 <input
                   type="text"
                   id="aadhar"
@@ -1766,31 +1555,6 @@
                 />
                 <div class="error-message" id="aadhar-error"></div>
               </div>
-            </div>
-
-            <div class="form-group">
-              <label for="ration-card"
-                >Ration Card (optional)</label
-              >
-              <div class="file-upload">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Click to upload or drag and drop your Ration Card</p>
-                <small>JPG, PNG or PDF. Max 2MB.</small>
-                <input
-                  type="file"
-                  id="ration-card"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  onchange="handleFileUpload(this)"
-                />
-              </div>
-              <div
-                id="file-preview-container"
-                style="display: none"
-                class="file-preview"
-              >
-                <!-- Preview will be added by JavaScript -->
-              </div>
-              <div class="error-message" id="ration-card-error"></div>
             </div>
 
             <div class="form-group">
@@ -2081,10 +1845,7 @@
               >
                 Back
               </button>
-              <button id="paymentButton" type="submit" class="submit-btn">
-                Pay Now
-              </button>
-              <div id="spinnerOverlay" style="display: none">Loading...</div>
+              <button type="submit" class="submit-btn">Make Payment</button>
             </div>
           </form>
         </div>
@@ -2120,11 +1881,6 @@
       </div>
     </div>
 
-    <!-- Loading Spinner -->
-    <div class="spinner-overlay" id="spinner-overlay" style="display: none">
-      <div class="spinner"></div>
-    </div>
-
     <div id="toast" class="toast">
       <div class="toast-icon">
         <i class="fas fa-check-circle"></i>
@@ -2153,11 +1909,11 @@
         <div class="footer-section">
           <h3>Quick Links</h3>
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/request">Resources</a></li>
-            <li><a href="/faq">FAQ</a></li>
-            <li><a href="/contact">Contact</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Resources</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Contact</a></li>
           </ul>
         </div>
 
@@ -2176,11 +1932,8 @@
       </div>
     </footer>
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script src="/js/sidebar.js"></script>
     <script>
       // Resource data
-      const API_URL = "http://localhost:5000"; // Adjust as needed
       const resources = {
         food: [
           {
@@ -2373,9 +2126,6 @@
       let checkoutStep = "delivery";
       let deliveryFormData = {};
       let paymentMethod = "upi";
-      let uploadedRationCard = null;
-
-      // API URL
 
       // DOM Elements
       const resourceItemsContainer = document.getElementById("resource-items");
@@ -2388,7 +2138,6 @@
       const checkoutButton = document.getElementById("checkout-btn");
       const checkoutForm = document.getElementById("checkout-form");
       const toastElement = document.getElementById("toast");
-      const spinnerOverlay = document.getElementById("spinner-overlay");
 
       // Initialize the page
       document.addEventListener("DOMContentLoaded", function () {
@@ -2454,7 +2203,7 @@
           .addEventListener("submit", function (event) {
             event.preventDefault();
             if (validatePaymentForm()) {
-              processPayment();
+              submitOrder();
             }
           });
 
@@ -2474,7 +2223,8 @@
           .querySelector(".hamburger")
           .addEventListener("click", function () {
             const navLinks = document.querySelector(".nav-links");
-            navLinks.classList.toggle("open");
+            navLinks.style.display =
+              navLinks.style.display === "flex" ? "none" : "flex";
           });
       }
 
@@ -2539,7 +2289,7 @@
             </div>
             <button class="add-to-cart-btn" onclick="addToCart('${item.id}')">Add</button>
         </div>
-      `;
+    `;
 
         itemElement.innerHTML = itemContent;
 
@@ -2744,7 +2494,6 @@
             name: item.name,
             price: item.price,
             quantity: quantity,
-            category: item.category,
           });
           showToast(`Added ${item.name} to cart`);
         }
@@ -2942,106 +2691,6 @@
         errorMessages.forEach((error) => {
           error.textContent = "";
         });
-
-        // Reset file upload
-        uploadedRationCard = null;
-        const filePreviewContainer = document.getElementById(
-          "file-preview-container"
-        );
-        filePreviewContainer.style.display = "none";
-        filePreviewContainer.innerHTML = "";
-      }
-
-      // Handle file upload
-      function handleFileUpload(inputElement) {
-        const file = inputElement.files[0];
-        const filePreviewContainer = document.getElementById(
-          "file-preview-container"
-        );
-        const errorElement = document.getElementById("ration-card-error");
-
-        // Reset error
-        errorElement.textContent = "";
-
-        if (file) {
-          // Validate file type
-          const validTypes = [
-            "image/jpeg",
-            "image/jpg",
-            "image/png",
-            "application/pdf",
-          ];
-          if (!validTypes.includes(file.type)) {
-            errorElement.textContent = "Please upload a JPG, PNG or PDF file";
-            inputElement.value = "";
-            filePreviewContainer.style.display = "none";
-            uploadedRationCard = null;
-            return;
-          }
-
-          // Validate file size (max 2MB)
-          if (file.size > 2 * 1024 * 1024) {
-            errorElement.textContent = "File size exceeds 2MB limit";
-            inputElement.value = "";
-            filePreviewContainer.style.display = "none";
-            uploadedRationCard = null;
-            return;
-          }
-
-          // Store file for submission
-          uploadedRationCard = file;
-
-          // Show preview
-          filePreviewContainer.style.display = "flex";
-
-          // Create preview content
-          let fileIcon = "";
-          if (file.type === "application/pdf") {
-            fileIcon =
-              '<i class="fas fa-file-pdf" style="font-size: 2rem; color: #f44336;"></i>';
-          } else {
-            // For images, create thumbnail
-            const reader = new FileReader();
-            reader.onload = function (e) {
-              const img = document.createElement("img");
-              img.src = e.target.result;
-              document.querySelector(".file-preview-icon").innerHTML = "";
-              document.querySelector(".file-preview-icon").appendChild(img);
-            };
-            reader.readAsDataURL(file);
-            fileIcon = '<div class="file-preview-icon"></div>';
-          }
-
-          filePreviewContainer.innerHTML = `
-            ${fileIcon}
-            <div class="file-info">
-              <div class="file-name">${file.name}</div>
-              <div class="file-size">${formatFileSize(file.size)}</div>
-            </div>
-            <button type="button" onclick="removeFile()">
-              <i class="fas fa-times"></i>
-            </button>
-          `;
-        }
-      }
-
-      // Format file size
-      function formatFileSize(bytes) {
-        if (bytes < 1024) return bytes + " bytes";
-        else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB";
-        else return (bytes / 1048576).toFixed(1) + " MB";
-      }
-
-      // Remove uploaded file
-      function removeFile() {
-        const fileInput = document.getElementById("ration-card");
-        fileInput.value = "";
-        uploadedRationCard = null;
-
-        const filePreviewContainer = document.getElementById(
-          "file-preview-container"
-        );
-        filePreviewContainer.style.display = "none";
       }
 
       // Validate delivery form
@@ -3079,13 +2728,9 @@
           isValid = false;
         }
 
-        // Validate email
+        // Validate email if provided
         const emailInput = document.getElementById("email");
-        if (!emailInput.value.trim()) {
-          document.getElementById("email-error").textContent =
-            "Email is required";
-          isValid = false;
-        } else {
+        if (emailInput.value.trim()) {
           const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           if (!emailPattern.test(emailInput.value.trim())) {
             document.getElementById("email-error").textContent =
@@ -3094,26 +2739,15 @@
           }
         }
 
-        // Validate aadhar
+        // Validate aadhar if provided
         const aadharInput = document.getElementById("aadhar");
-        if (!aadharInput.value.trim()) {
-          document.getElementById("aadhar-error").textContent =
-            "Aadhar number is required";
-          isValid = false;
-        } else {
+        if (aadharInput.value.trim()) {
           const aadharPattern = /^[0-9]{12}$/;
           if (!aadharPattern.test(aadharInput.value.trim())) {
             document.getElementById("aadhar-error").textContent =
               "Aadhar should be 12 digits";
             isValid = false;
           }
-        }
-
-        // Validate ration card
-        if (!uploadedRationCard) {
-          document.getElementById("ration-card-error").textContent =
-            "Please upload your ration card";
-          isValid = false;
         }
 
         // Validate address
@@ -3165,13 +2799,14 @@
         deliveryFormData = {
           name: document.getElementById("name").value.trim(),
           phone: document.getElementById("phone").value.trim(),
-          email: document.getElementById("email").value.trim(),
-          aadhar: document.getElementById("aadhar").value.trim(),
+          email:
+            document.getElementById("email").value.trim() || "Not provided",
+          aadhar:
+            document.getElementById("aadhar").value.trim() || "Not provided",
           address: document.getElementById("address").value.trim(),
           wardno: document.getElementById("wardno").value.trim(),
           pincode: document.getElementById("pincode").value.trim(),
           familySize: document.getElementById("family-size").value,
-          rationCard: uploadedRationCard,
         };
       }
 
@@ -3191,39 +2826,18 @@
             <span class="review-info-value">${deliveryFormData.phone}</span>
         </div>
         <div class="review-info-row">
-            <span class="review-info-label">Email:</span>
-            <span class="review-info-value">${deliveryFormData.email}</span>
-        </div>
-        <div class="review-info-row">
-            <span class="review-info-label">Aadhar:</span>
-            <span class="review-info-value">${deliveryFormData.aadhar.replace(
-              /(\d{4})(\d{4})(\d{4})/,
-              "$1-$2-$3"
-            )}</span>
-        </div>
-        <div class="review-info-row">
-            <span class="review-info-label">Ration Card:</span>
-            <span class="review-info-value">${
-              deliveryFormData.rationCard ? "Uploaded" : "Not uploaded"
-            }</span>
-        </div>
-        <div class="review-info-row">
             <span class="review-info-label">Address:</span>
             <span class="review-info-value">${deliveryFormData.address}</span>
         </div>
         <div class="review-info-row">
             <span class="review-info-label">Ward/PIN:</span>
-            <span class="review-info-value">Ward ${deliveryFormData.wardno}, ${
-          deliveryFormData.pincode
-        }</span>
+            <span class="review-info-value">Ward ${deliveryFormData.wardno}, ${deliveryFormData.pincode}</span>
         </div>
         <div class="review-info-row">
             <span class="review-info-label">Family Size:</span>
-            <span class="review-info-value">${
-              deliveryFormData.familySize
-            }</span>
+            <span class="review-info-value">${deliveryFormData.familySize}</span>
         </div>
-      `;
+    `;
 
         // Populate order items
         const reviewItems = document.getElementById("review-items");
@@ -3239,7 +2853,7 @@
                 <div class="review-item-quantity">Qty: ${item.quantity}</div>
             </div>
             <div class="review-item-price">₹${item.price * item.quantity}</div>
-          `;
+        `;
 
           reviewItems.appendChild(reviewItem);
         });
@@ -3379,187 +2993,10 @@
         return isValid;
       }
 
-      // Process payment using Razorpay
-
-  // Mock data (replace with your actual data sources)
-
-  function showToast(message, type) {
-    console.log(`Toast: ${message} (${type})`); // Replace with your toast implementation
-  }
-
-  function processPayment() {
-    const paymentButton = document.querySelector("#paymentButton");
-    console.log("Payment button:", paymentButton);
-    if (paymentButton) paymentButton.disabled = true;
-
-    const spinnerOverlay = document.getElementById("spinnerOverlay") || { style: { display: "none" } };
-    spinnerOverlay.style.display = "flex";
-
-    const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const requestData = {
-      name: deliveryFormData.name,
-      phone: deliveryFormData.phone,
-      email: deliveryFormData.email,
-      aadhar: deliveryFormData.aadhar, // Ensure this matches backend key
-      address: deliveryFormData.address,
-      wardno: deliveryFormData.wardno,
-      pincode: deliveryFormData.pincode,
-      familySize: deliveryFormData.familySize,
-      items: cart.map((item) => ({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        category: item.category,
-      })),
-      totalAmount: totalAmount,
-      paymentMethod: paymentMethod,
-    };
-
-    console.log("Sending request data:", JSON.stringify(requestData, null, 2)); // Detailed log
-
-    fetch(`${API_URL}/api/requests`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.json().then((err) => {
-            throw new Error(err.message || `Server error: ${response.status}`);
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Backend response:", data);
-        if (data.payment && data.payment.orderId) {
-          const options = {
-            key: "rzp_test_bZWOcTtgLAp6U8", // Replace with your test key
-            amount: totalAmount * 100,
-            currency: "INR",
-            order_id: data.payment.orderId,
-            handler: function (response) {
-              verifyPayment(response, data.requestId);
-            },
-            modal: {
-              ondismiss: () => {
-                spinnerOverlay.style.display = "none";
-                if (paymentButton) paymentButton.disabled = false;
-              },
-            },
-          };
-          const rzp = new window.Razorpay(options);
-          rzp.open();
-        } else {
-          throw new Error("No order ID returned");
-        }
-      })
-      .catch((error) => {
-        console.error("Payment error:", error);
-        showToast(`Payment failed: ${error.message}`, "error");
-        spinnerOverlay.style.display = "none";
-        if (paymentButton) paymentButton.disabled = false;
-      });
-  }
-
-
-      // Verify payment with server
-      function verifyPayment(paymentResponse, requestId) {
-        // Show loading spinner
-        spinnerOverlay.style.display = "flex";
-
-        // Send verification to server
-        fetch(`${API_URL}/api/payments/verify`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            razorpay_payment_id: paymentResponse.razorpay_payment_id,
-            razorpay_order_id: paymentResponse.razorpay_order_id,
-            razorpay_signature: paymentResponse.razorpay_signature,
-            requestId: requestId,
-          }),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Payment verification failed");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            spinnerOverlay.style.display = "none";
-            if (data.success) {
-              // Payment successful - proceed to confirmation
-              completePurchase(requestId);
-            } else {
-              // Payment verification failed
-              showToast("Payment verification failed", "error");
-            }
-          })
-          .catch((error) => {
-            console.error("Verification error:", error);
-            spinnerOverlay.style.display = "none";
-            showToast("Payment verification failed", "error");
-          });
-      }
-
-      // Submit order for COD
-      function submitOrder(requestData) {
-        fetch(`${API_URL}/api/requests/cod`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(requestData),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Failed to create order");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            spinnerOverlay.style.display = "none";
-            completePurchase(data.requestId);
-          })
-          .catch((error) => {
-            console.error("Order submission error:", error);
-            spinnerOverlay.style.display = "none";
-            showToast("Failed to submit your order", "error");
-          });
-      }
-
-      // Upload ration card to server and continue with purchase
-      function uploadRationCard(requestId) {
-        if (!uploadedRationCard) {
-          completePurchase(requestId);
-          return;
-        }
-
-        const formData = new FormData();
-        formData.append("rationCard", uploadedRationCard);
-        formData.append("requestId", requestId);
-
-        fetch(`${API_URL}/api/upload/rationcard`, {
-          method: "POST",
-          body: formData,
-        })
-          .then((response) => {
-            if (!response.ok) {
-              console.warn(
-                "Ration card upload failed but continuing with purchase"
-              );
-            }
-            completePurchase(requestId);
-          })
-          .catch((error) => {
-            console.warn("Ration card upload error:", error);
-            completePurchase(requestId);
-          });
-      }
-
-      // Complete purchase and show confirmation
-      function completePurchase(requestId) {
-        // Generate request ID if not provided
-        const displayRequestId = requestId || generateRequestId();
+      // Submit order
+      function submitOrder() {
+        // Generate request ID
+        const requestId = generateRequestId();
 
         // Get current date
         const currentDate = new Date().toLocaleDateString("en-GB", {
@@ -3585,16 +3022,13 @@
             break;
         }
 
-        // Calculate total amount
-        const totalAmount = cart.reduce(
+        // Update confirmation details
+        document.getElementById("request-id").textContent = requestId;
+        document.getElementById("request-date").textContent = currentDate;
+        document.getElementById("paid-amount").textContent = cart.reduce(
           (sum, item) => sum + item.price * item.quantity,
           0
         );
-
-        // Update confirmation details
-        document.getElementById("request-id").textContent = displayRequestId;
-        document.getElementById("request-date").textContent = currentDate;
-        document.getElementById("paid-amount").textContent = totalAmount;
         document.getElementById("payment-method-used").textContent =
           paymentMethodText;
 
@@ -3606,8 +3040,18 @@
         saveCartToStorage();
         updateCartUI();
 
-        // Hide spinner
-        spinnerOverlay.style.display = "none";
+        // Simulate API call to backend (would be replaced with actual API call)
+        console.log("Order submitted:", {
+          requestId,
+          date: currentDate,
+          customer: deliveryFormData,
+          items: cart,
+          paymentMethod,
+          totalAmount: cart.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0
+          ),
+        });
       }
 
       // Generate random request ID
@@ -3621,30 +3065,13 @@
       }
 
       // Show toast notification
-      function showToast(message, type = "success") {
+      function showToast(message) {
         const toast = document.getElementById("toast");
         const toastMessage = document.getElementById("toast-message");
-        const toastIcon = document.querySelector(".toast-icon i");
 
-        // Set message
         toastMessage.textContent = message;
-
-        // Set icon based on type
-        if (type === "success") {
-          toastIcon.className = "fas fa-check-circle";
-          toastIcon.style.color = "var(--success-color)";
-        } else if (type === "error") {
-          toastIcon.className = "fas fa-exclamation-circle";
-          toastIcon.style.color = "var(--error-color)";
-        } else if (type === "warning") {
-          toastIcon.className = "fas fa-exclamation-triangle";
-          toastIcon.style.color = "var(--warning-color)";
-        }
-
-        // Show toast
         toast.classList.add("show");
 
-        // Auto-hide toast after 3 seconds
         setTimeout(() => {
           toast.classList.remove("show");
         }, 3000);

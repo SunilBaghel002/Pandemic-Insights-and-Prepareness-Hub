@@ -58,7 +58,134 @@ const observer = new IntersectionObserver(
   { threshold: 0.5 }
 );
 
-// Fetch and Display Pandemic Data
+// Enhanced Tutorial System with Sidebar Focus and Local Storage
+const tutorialSteps = [
+  {
+    title: "Welcome to Pandemic Response!",
+    text: "This tutorial will guide you through the key features, starting with the Sidebar. Let’s begin!",
+    element: "#sidebar",
+  },
+  {
+    title: "Dashboard",
+    text: "Click 'Dashboard' to access the main control panel with an overview of all features.",
+    element: ".sidebar-link[href='/firstPage']",
+  },
+  {
+    title: "Live Pandemic Stats",
+    text: "View real-time global or country-specific pandemic data with interactive charts.",
+    element: ".sidebar-link[href='/pandamic']",
+  },
+  {
+    title: "Need Resources",
+    text: "Request essential supplies here. Fill out a form, and volunteers will assist after approval.",
+    element: ".sidebar-link[href='/request']",
+  },
+  {
+    title: "Find Hospitals",
+    text: "Locate nearby hospitals and send alerts for immediate help if needed.",
+    element: ".sidebar-link[href='/map']",
+  },
+  {
+    title: "Graph Analytics",
+    text: "Dive into detailed graphs and analytics to understand pandemic trends.",
+    element: ".sidebar-link[href='/stats']",
+  },
+  {
+    title: "Organizations",
+    text: "Explore or join organizations helping with pandemic response efforts.",
+    element: ".sidebar-link[href='/organizations']",
+  },
+  {
+    title: "Org Dashboard",
+    text: "Manage your organization’s volunteers, projects, and resources here.",
+    element: ".sidebar-link[href='/org-dashboard']",
+  },
+  {
+    title: "User Dashboard",
+    text: "Track your volunteer activities, tasks, and contributions in this personal dashboard.",
+    element: ".sidebar-link[href='/user-dashboard']",
+  },
+  {
+    title: "Alerts",
+    text: "Stay updated with notifications about critical updates or emergencies.",
+    element: ".sidebar-link[href='/alerts']",
+  },
+  {
+    title: "Profile",
+    text: "View and edit your personal information and settings here.",
+    element: ".sidebar-link[href='/profile']",
+  },
+  {
+    title: "Main Page Features",
+    text: "Now explore the main page! Use the Navbar or scroll to see Stats, Resources, and FAQs.",
+    element: ".navbar",
+  },
+  {
+    title: "All Set!",
+    text: "You’re ready to use the dashboard! Click any Sidebar link to get started.",
+    element: null,
+  },
+];
+
+let currentStep = 0;
+const tutorialOverlay = document.getElementById("tutorial-overlay");
+const tutorialTitle = document.getElementById("tutorial-title");
+const tutorialText = document.getElementById("tutorial-text");
+const nextBtn = document.getElementById("next-tutorial");
+const skipBtn = document.getElementById("skip-tutorial");
+
+function startTutorial() {
+  // Check if tutorial was previously skipped
+  if (localStorage.getItem("tutorialSkipped") === "true") {
+    return; // Don’t start if skipped before
+  }
+  tutorialOverlay.style.display = "flex";
+  showTutorialStep(currentStep);
+}
+
+function showTutorialStep(step) {
+  const stepData = tutorialSteps[step];
+  tutorialTitle.textContent = stepData.title;
+  tutorialText.textContent = stepData.text;
+
+  // Remove previous highlight
+  document.querySelectorAll(".highlight").forEach((el) => {
+    el.classList.remove("highlight");
+  });
+
+  // Highlight current element
+  if (stepData.element) {
+    const element = document.querySelector(stepData.element);
+    if (element) {
+      element.classList.add("highlight");
+      element.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+}
+
+function endTutorial() {
+  tutorialOverlay.style.display = "none";
+  document.querySelectorAll(".highlight").forEach((el) => {
+    el.classList.remove("highlight");
+  });
+  closeVolunteerModal(); // Close modal if open
+}
+
+nextBtn.addEventListener("click", () => {
+  currentStep++;
+  if (currentStep < tutorialSteps.length) {
+    showTutorialStep(currentStep);
+  } else {
+    endTutorial();
+  }
+});
+
+skipBtn.addEventListener("click", () => {
+  localStorage.setItem("tutorialSkipped", "true"); // Store skip preference
+  endTutorial();
+});
+
+// Fetch and Display Pandemic Data (unchanged)
 async function fetchPandemicData(country = "global") {
   try {
     const url =
@@ -107,7 +234,7 @@ async function fetchPandemicData(country = "global") {
   }
 }
 
-// Fetch and Display Historical Data
+// Fetch and Display Historical Data (unchanged)
 async function fetchHistoricalData(country = "global") {
   try {
     const url =
@@ -131,7 +258,7 @@ async function fetchHistoricalData(country = "global") {
   }
 }
 
-// Optimized Chart Rendering
+// Optimized Chart Rendering (unchanged)
 function renderChart(dates, cases, deaths, recovered, country) {
   const chartElement = document.getElementById("infectionRateChart");
   if (!chartElement) {
@@ -181,9 +308,9 @@ function renderChart(dates, cases, deaths, recovered, country) {
           display: true,
           text: `COVID-19 Trends for ${country}`,
           font: { size: 18 },
-          color: "#fff",
+          color: "black",
         },
-        legend: { labels: { color: "#fff" } },
+        legend: { labels: { color: "black" } },
       },
       elements: { line: { borderWidth: 2 } },
     },
@@ -220,15 +347,15 @@ function renderPieChart(active, recovered, deaths, vaccinated) {
           display: true,
           text: "COVID-19 Distribution",
           font: { size: 18 },
-          color: "#fff",
+          color: "black",
         },
-        legend: { labels: { color: "#fff" } },
+        legend: { labels: { color: "black" } },
       },
     },
   });
 }
 
-// Populate Country Dropdown
+// Populate Country Dropdown (unchanged)
 async function populateCountryDropdown() {
   try {
     const response = await fetch("https://disease.sh/v3/covid-19/countries");
@@ -253,7 +380,7 @@ async function populateCountryDropdown() {
   }
 }
 
-// Volunteer Modal Functions
+// Volunteer Modal Functions (unchanged)
 function openVolunteerModal() {
   const modal = document.getElementById("volunteer-modal");
   if (modal) {
@@ -374,7 +501,7 @@ async function fetchOrganizations() {
   }
 }
 
-// Form Submissions
+// Form Submissions (unchanged)
 async function submitVolunteer(data) {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -407,6 +534,9 @@ async function submitVolunteer(data) {
 
 // Event Listeners and Initialization
 document.addEventListener("DOMContentLoaded", async () => {
+  // Start tutorial on page load if not skipped
+  startTutorial();
+
   // Observe sections for navbar highlighting
   document.querySelectorAll("section").forEach((section) => {
     if (section) observer.observe(section);
@@ -482,7 +612,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Element #country-select not found");
   }
 
-  // ScrollReveal animations
+  // ScrollReveal animations (unchanged)
   if (typeof ScrollReveal !== "undefined") {
     ScrollReveal().reveal(".stat-card", {
       delay: 200,
@@ -509,35 +639,34 @@ document.addEventListener("DOMContentLoaded", async () => {
       interval: 100,
     });
   }
-
-  // Org Listing for /organizations
-  if (window.location.pathname === "/organizations") {
-    loadOrganizations();
-    const orgFilter = document.getElementById("org-filter");
-    const categoryFilter = document.getElementById("category-filter");
-    const locationFilter = document.getElementById("location-filter");
-    if (orgFilter) orgFilter.addEventListener("input", filterOrganizations);
-    if (categoryFilter)
-      categoryFilter.addEventListener("change", filterOrganizations);
-    if (locationFilter)
-      locationFilter.addEventListener("change", filterOrganizations);
-  }
-
-  // Org Dashboard for /org-dashboard
-  if (window.location.pathname === "/org-dashboard") {
-    loadOrgDashboard();
-    const eventForm = document.getElementById("event-form");
-    const orgProfileForm = document.getElementById("org-profile-form");
-    if (eventForm) eventForm.addEventListener("submit", handleEventFormSubmit);
-    if (orgProfileForm)
-      orgProfileForm.addEventListener("submit", handleOrgProfileSubmit);
-  }
-
-  // User Dashboard for /user-dashboard
-  if (window.location.pathname === "/user-dashboard") {
-    loadUserDashboard();
-  }
 });
+
+if (window.location.pathname === "/organizations") {
+  loadOrganizations();
+  const orgFilter = document.getElementById("org-filter");
+  const categoryFilter = document.getElementById("category-filter");
+  const locationFilter = document.getElementById("location-filter");
+  if (orgFilter) orgFilter.addEventListener("input", filterOrganizations);
+  if (categoryFilter)
+    categoryFilter.addEventListener("change", filterOrganizations);
+  if (locationFilter)
+    locationFilter.addEventListener("change", filterOrganizations);
+}
+
+// Org Dashboard for /org-dashboard
+if (window.location.pathname === "/org-dashboard") {
+  loadOrgDashboard();
+  const eventForm = document.getElementById("event-form");
+  const orgProfileForm = document.getElementById("org-profile-form");
+  if (eventForm) eventForm.addEventListener("submit", handleEventFormSubmit);
+  if (orgProfileForm)
+    orgProfileForm.addEventListener("submit", handleOrgProfileSubmit);
+}
+
+// User Dashboard for /user-dashboard
+if (window.location.pathname === "/user-dashboard") {
+  loadUserDashboard();
+}
 
 // Org Listing Functions
 async function loadOrganizations() {
@@ -559,17 +688,17 @@ async function loadOrganizations() {
       const card = document.createElement("div");
       card.className = "org-card";
       card.innerHTML = `
-        <img src="${org.logo || "/default-org.png"}" alt="${org.name}">
-        <h3>${org.name}</h3>
-        <p>${org.description.substring(0, 100)}...</p>
-        <p><i class="fa-solid fa-map-marker-alt"></i> ${org.location}</p>
-        <p><i class="fa-solid fa-users"></i> Volunteers Needed: ${
-          org.volunteerRequirements
-        }</p>
-        <button class="join-btn" onclick="joinOrganization('${
-          org._id
-        }')">Join</button>
-      `;
+  <img src="${org.logo || "/default-org.png"}" alt="${org.name}">
+  <h3>${org.name}</h3>
+  <p>${org.description.substring(0, 100)}...</p>
+  <p><i class="fa-solid fa-map-marker-alt"></i> ${org.location}</p>
+  <p><i class="fa-solid fa-users"></i> Volunteers Needed: ${
+    org.volunteerRequirements
+  }</p>
+  <button class="join-btn" onclick="joinOrganization('${
+    org._id
+  }')">Join</button>
+`;
       grid.appendChild(card);
       locations.add(org.location);
     });
@@ -633,9 +762,9 @@ async function joinOrganization(orgId) {
     showPopupMessage("Error during join request.");
   }
 }
-document.addEventListener("DOMContentLoaded", ()=>{
+document.addEventListener("DOMContentLoaded", () => {
   loadOrgDashboard();
-})
+});
 // Org Dashboard Functions
 async function loadOrgDashboard() {
   const token = localStorage.getItem("token");
@@ -670,18 +799,18 @@ async function loadOrgDashboard() {
         const div = document.createElement("div");
         div.className = "volunteer-item";
         div.innerHTML = `
-          <p>${vol.name} (${vol.email}) - Status: ${vol.status}</p>
-          <div class="action-btns">
-            ${
-              vol.status === "pending"
-                ? `
-              <button class="action-btn" onclick="manageVolunteer('${vol._id}', 'accept')">Accept</button>
-              <button class="action-btn" onclick="manageVolunteer('${vol._id}', 'reject')">Reject</button>
-            `
-                : `<button class="action-btn" onclick="assignTask('${vol._id}')">Assign Task</button>`
-            }
-          </div>
-        `;
+    <p>${vol.name} (${vol.email}) - Status: ${vol.status}</p>
+    <div class="action-btns">
+      ${
+        vol.status === "pending"
+          ? `
+        <button class="action-btn" onclick="manageVolunteer('${vol._id}', 'accept')">Accept</button>
+        <button class="action-btn" onclick="manageVolunteer('${vol._id}', 'reject')">Reject</button>
+      `
+          : `<button class="action-btn" onclick="assignTask('${vol._id}')">Assign Task</button>`
+      }
+    </div>
+  `;
         volunteerList.appendChild(div);
       });
     }
@@ -692,9 +821,9 @@ async function loadOrgDashboard() {
         const div = document.createElement("div");
         div.className = "event-item";
         div.innerHTML = `
-          <p>${proj.name} - ${new Date(proj.date).toLocaleString()}</p>
-          <p>Funds: $${proj.fundsRaised}</p>
-        `;
+    <p>${proj.name} - ${new Date(proj.date).toLocaleString()}</p>
+    <p>Funds: $${proj.fundsRaised}</p>
+  `;
         eventList.appendChild(div);
       });
     }
@@ -825,9 +954,9 @@ async function handleOrgProfileSubmit(e) {
     showPopupMessage("Error updating profile.");
   }
 }
-document.addEventListener("DOMContentLoaded", ()=>{
+document.addEventListener("DOMContentLoaded", () => {
   loadUserDashboard();
-})
+});
 // User Dashboard Functions
 async function loadUserDashboard() {
   const token = localStorage.getItem("token");
@@ -869,9 +998,9 @@ async function loadUserDashboard() {
         });
         taskList += "</ul>";
         div.innerHTML = `
-          <p>${org.name} - ${org.tasks.length} Tasks Assigned</p>
-          ${org.tasks.length > 0 ? taskList : "<p>No tasks assigned yet.</p>"}
-        `;
+    <p>${org.name} - ${org.tasks.length} Tasks Assigned</p>
+    ${org.tasks.length > 0 ? taskList : "<p>No tasks assigned yet.</p>"}
+  `;
         joinedList.appendChild(div);
       });
     }
@@ -892,13 +1021,13 @@ async function loadUserDashboard() {
         const card = document.createElement("div");
         card.className = "org-card";
         card.innerHTML = `
-          <img src="${org.logo || "/default-org.png"}" alt="${org.name}">
-          <h3>${org.name}</h3>
-          <p>${org.description.substring(0, 100)}...</p>
-          <button class="join-btn" onclick="joinOrganization('${
-            org._id
-          }')">Join</button>
-        `;
+    <img src="${org.logo || "/default-org.png"}" alt="${org.name}">
+    <h3>${org.name}</h3>
+    <p>${org.description.substring(0, 100)}...</p>
+    <button class="join-btn" onclick="joinOrganization('${
+      org._id
+    }')">Join</button>
+  `;
         recommendedOrgs.appendChild(card);
       });
     }

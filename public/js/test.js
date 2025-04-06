@@ -11,7 +11,6 @@ const fs = require("fs");
 const WebSocket = require("ws");
 const cors = require("cors");
 const Razorpay = require("razorpay");
-const { createObjectCsvWriter } = require("csv-writer"); // Added for export feature
 
 dotenv.config();
 const app = express();
@@ -25,8 +24,8 @@ app.use(
 
 // Initialize Razorpay
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_bZWOcTtgLAp6U8",
-  key_secret: process.env.RAZORPAY_KEY_SECRET || "GA6BjC4wSaj0hdDgxq0yAmv4",
+  key_id: process.env.RAZORPAY_KEY_ID || "rzp_test_YOUR_TEST_KEY",
+  key_secret: process.env.RAZORPAY_KEY_SECRET || "YOUR_SECRET_KEY",
 });
 
 // Ensure uploads directory exists
@@ -92,9 +91,6 @@ const userSchema = new mongoose.Schema({
       ],
       hours: { type: Number, default: 0 },
       contributions: { type: Number, default: 0 },
-      skills: { type: String }, // Added for volunteer skills
-      badges: { type: [String], default: [] }, // Added for gamification
-      bio: { type: String }, // Added for volunteer spotlight
     },
   ],
   tasksCompleted: { type: Number, default: 0 },
@@ -176,7 +172,6 @@ const organizationSchema = new mongoose.Schema({
     },
   ],
   creator: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  stories: [{ type: String }], // Added for success stories
 });
 const Organization = mongoose.model("Organization", organizationSchema);
 
@@ -266,9 +261,6 @@ app.get("/user-dashboard", (req, res) =>
 app.get("/hospital-dashboard", (req, res) =>
   res.sendFile(path.join(__dirname, "/views/hospital-dashboard.html"))
 );
-app.get("/alerts", (req, res) =>
-  res.sendFile(path.join(__dirname, "/views/alert.html"))
-);
 
 const allowedEmails = [
   "sunilnp@acem.edu.in",
@@ -311,11 +303,9 @@ app.get("/admin", (req, res) => {
 const server = app.listen(5000, () =>
   console.log("Server running on port 5000")
 );
-
 const wss = new WebSocket.Server({ server });
 
 let hospitalClients = [];
-let orgClients = []; // Added for organization notifications
 
 wss.on("connection", (ws) => {
   console.log("New client connected");
@@ -356,11 +346,6 @@ wss.on("connection", (ws) => {
       ws.on("close", () => {
         hospitalClients = hospitalClients.filter((client) => client !== ws);
       });
-    }else if (data.type === "org-connect") { // Added for org dashboard
-      orgClients.push(ws);
-      ws.on("close", () => {
-        orgClients = orgClients.filter((client) => client !== ws);
-      });
     }
   });
 
@@ -370,25 +355,16 @@ wss.on("connection", (ws) => {
 // Authentication Middleware
 function authMiddleware(req, res, next) {
   const token = req.headers["authorization"]?.split(" ")[1];
-  console.log("Token received:", token); // Debug log
   if (!token) return res.status(401).json({ error: "No token provided" });
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Decoded token:", decoded); // Debug log
     req.user = decoded;
     next();
   } catch (err) {
-    console.error("Token verification failed:", err.message); // Debug log
     res.status(401).json({ error: "Invalid token" });
   }
 }
-function sendOrgNotification(orgId, message) {
-  orgClients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify({ type: "notification", orgId, message }));
-    }
-  });
-}
+
 // Resource Routes
 async function seedInitialResources() {
   try {
@@ -642,72 +618,76 @@ app.put("/api/resources/:id/stock", authMiddleware, async (req, res) => {
 // Create a new resource request
 app.post("/api/requests", async (req, res) => {
   try {
-    const { name,
+    const {
+      name,
       phone,
       email,
-      aadhar, // Ensure this matches the frontend key exactly
+      aadhar,
       address,
       wardno,
       pincode,
       familySize,
       items,
       totalAmount,
-      paymentMethod, } =
-      req.body;
-    console.log("Received request body:", req.body);
+      paymentMethod,
+    } = req.body;
 
+    // Validate required fields
     if (!name || !phone || !email || !address || !items || items.length === 0) {
-      console.log("Validation failed:", { name, phone, email, address, items });
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    const safeAadhar = aadhar !== undefined ? aadhar : null; // Explicit check
-    const safeWardno = wardno !== undefined ? wardno : null;
-    const safePincode = pincode !== undefined ? pincode : null;
-    const safeFamilySize = familySize !== undefined ? familySize : null;
+    // Generate unique request_id
     const counter = await Counter.findOneAndUpdate(
       { modelName: "Request" },
       { $inc: { currentId: 1 } },
       { new: true, upsert: true }
     );
+
     const requestId = counter.currentId;
 
+    // Create new request
     const newRequest = new Request({
       request_id: requestId,
-      name: name,
-      phone: phone,
-      email: email,
-      aadhar: safeAadhar, // Use the safe version
-      address: address,
-      wardno: safeWardno,
-      pincode: safePincode,
-      familySize: safeFamilySize,
-      items: items,
-      totalAmount: totalAmount,
-      paymentMethod: paymentMethod,
+      name,
+      phone,
+      email,
+      aadhar,
+      address,
+      wardno,
+      pincode,
+      familySize,
+      items,
+      totalAmount,
+      paymentMethod,
       requestType: items[0]?.category || "mixed",
       description: `Order containing ${items.length} items`,
       status: "pending",
       paymentStatus: paymentMethod === "cod" ? "pending" : "pending",
     });
-    await newRequest.save();
-    console.log("Request saved:", newRequest);
 
+    await newRequest.save();
+    console.log("New request created:", newRequest);
+
+    // If payment method is not COD, create a Razorpay order
     let paymentResponse = {};
+
     if (paymentMethod !== "cod") {
       const razorpayOrder = await razorpay.orders.create({
-        amount: totalAmount * 100,
+        amount: totalAmount * 100, // Razorpay expects amount in paise
         currency: "INR",
         receipt: `req_${requestId}`,
         payment_capture: 1,
       });
-      console.log("Razorpay order created:", razorpayOrder);
+
+      // Save payment information
       const payment = new Payment({
         requestId: requestId,
         razorpayOrderId: razorpayOrder.id,
         amount: totalAmount,
         status: "created",
       });
+
       await payment.save();
       paymentResponse = {
         orderId: razorpayOrder.id,
@@ -1027,7 +1007,6 @@ app.get("/check-email", (req, res) => {
 app.post("/register", async (req, res) => {
   const { email, password } = req.body;
   const otp = generateOTP();
-  console.log("Generated OTP:", otp);
   otpStorage[email] = otp;
 
   const existingUser = await User.findOne({ email });
@@ -1633,132 +1612,7 @@ app.get("/api/user/profile", authMiddleware, async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-app.get("/api/org/volunteers", authMiddleware, async (req, res) => {
-  try {
-    const org = await Organization.findOne({ creator: req.user.userId });
-    if (!org) return res.status(404).json({ error: "Organization not found" });
 
-    const volunteers = await User.find({ "volunteerData.orgId": org._id });
-    res.json(
-      volunteers.map((v) => {
-        const vData = v.volunteerData.find((d) => d.orgId.equals(org._id));
-        return {
-          _id: v._id,
-          name: v.name,
-          email: v.email,
-          skills: vData.skills,
-          badges: vData.badges,
-          photo: v.photo || "/images/default-photo.png",
-          bio: vData.bio || "No bio provided",
-        };
-      })
-    );
-  } catch (err) {
-    console.error("Error fetching volunteers:", err);
-    res.status(500).json({ error: "Server error" });
-  }
-});
-app.get("/api/org/profile", authMiddleware, async (req, res) => {
-  try {
-    const org = await Organization.findOne({ creator: req.user.userId });
-    if (!org) return res.status(404).json({ error: "Organization not found" });
-
-    res.json({
-      bio: org.description,
-      logo: org.logo,
-      cover: org.cover,
-      stories: org.stories || [],
-    });
-  } catch (err) {
-    console.error("Error fetching org profile:", err);
-    res.status(500).json({ error: "Server error" });
-  }
-});
-
-app.post(
-  "/api/org/profile",
-  authMiddleware,
-  upload.fields([{ name: "cover" }, { name: "logo" }]),
-  async (req, res) => {
-    try {
-      const org = await Organization.findOne({ creator: req.user.userId });
-      if (!org) return res.status(404).json({ error: "Organization not found" });
-
-      org.description = req.body.bio || org.description;
-      if (req.files.cover) org.cover = "uploads/" + req.files.cover[0].filename;
-      if (req.files.logo) org.logo = "uploads/" + req.files.logo[0].filename;
-      if (req.body.stories) org.stories = JSON.parse(req.body.stories);
-      await org.save();
-      res.json({ message: "Profile updated" });
-    } catch (err) {
-      console.error("Error updating org profile:", err);
-      res.status(500).json({ error: "Server error" });
-    }
-  }
-);
-app.get("/api/org/suggestions", authMiddleware, async (req, res) => {
-  try {
-    // Simulate AI suggestion (replace with real AI logic)
-    res.json({ suggestion: "Assign a logistics task to a volunteer with relevant skills." });
-  } catch (err) {
-    console.error("Error fetching suggestions:", err);
-    res.status(500).json({ error: "Server error" });
-  }
-});
-
-// Export Data (Volunteers and Events)
-app.get("/api/org/export/:type", authMiddleware, async (req, res) => {
-  try {
-    const org = await Organization.findOne({ creator: req.user.userId });
-    if (!org) return res.status(404).json({ error: "Organization not found" });
-
-    const type = req.params.type;
-    let data, headers;
-
-    if (type === "volunteers") {
-      const volunteers = await User.find({ "volunteerData.orgId": org._id });
-      data = volunteers.map((v) => {
-        const vData = v.volunteerData.find((d) => d.orgId.equals(org._id));
-        return {
-          Name: v.name,
-          Email: v.email,
-          Skills: vData.skills || "N/A",
-          Badges: vData.badges.join(", ") || "None",
-        };
-      });
-      headers = [
-        { id: "Name", title: "Name" },
-        { id: "Email", title: "Email" },
-        { id: "Skills", title: "Skills" },
-        { id: "Badges", title: "Badges" },
-      ];
-    } else if (type === "events") {
-      data = org.projects.map((p) => ({
-        Name: p.name,
-        Description: p.description,
-        Date: p.date.toISOString().split("T")[0],
-      }));
-      headers = [
-        { id: "Name", title: "Name" },
-        { id: "Description", title: "Description" },
-        { id: "Date", title: "Date" },
-      ];
-    } else {
-      return res.status(400).json({ error: "Invalid export type" });
-    }
-
-    const csvWriter = createObjectCsvWriter({
-      path: path.join(__dirname, "public", `${type}.csv`),
-      header: headers,
-    });
-
-    await csvWriter.writeRecords(data);
-    res.download(path.join(__dirname, "public", `${type}.csv`));
-  } catch (err) {
-    console.error("Error exporting data:", err);
-    res.status(500).json({ error: "Server error" });
-  }
-});
 app.post(
   "/api/user/update",
   authMiddleware,
@@ -1783,13 +1637,14 @@ app.post(
 
 // Volunteer and Organization Routes
 app.post("/api/volunteer/signup", authMiddleware, async (req, res) => {
-  const { name, email, phone, skills, location, description, orgId, type, bio } = req.body;
+  const { name, email, phone, skills, location, description, orgId, type } =
+    req.body;
   try {
     const user = await User.findById(req.user.userId);
     if (!user) return res.status(404).json({ error: "User not found" });
 
     if (type === "individual") {
-      user.volunteerData.push({ skills, bio });
+      user.volunteerData.push({ skills });
     } else if (type === "create-org") {
       const org = new Organization({
         name,
@@ -1799,28 +1654,17 @@ app.post("/api/volunteer/signup", authMiddleware, async (req, res) => {
         creator: req.user.userId,
       });
       await org.save();
-      user.volunteerData.push({ orgId: org._id, status: "accepted", skills, bio });
+      user.volunteerData.push({ orgId: org._id, status: "accepted" });
       user.isOrgHead = true;
     } else if (type === "join-org") {
       const org = await Organization.findById(orgId);
-      if (!org) return res.status(404).json({ error: "Organization not found" });
-      user.volunteerData.push({ orgId, skills, bio });
-      sendOrgNotification(orgId, `New volunteer signup request from ${name}`);
+      if (!org)
+        return res.status(404).json({ error: "Organization not found" });
+      user.volunteerData.push({ name, email, orgId });
     }
     await user.save();
     res.json({ message: "Signup successful" });
   } catch (err) {
-    console.error("Error in volunteer signup:", err);
-    res.status(500).json({ error: "Server error" });
-  }
-});
-app.get("/api/org/resources", authMiddleware, async (req, res) => {
-  try {
-    // Assuming organization-specific resources are tied to requests or donations
-    const resources = await Resource.find(); // Adjust logic if org-specific resources are needed
-    res.json(resources);
-  } catch (err) {
-    console.error("Error fetching resources:", err);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -1980,7 +1824,7 @@ app.post(
   }
 );
 
-app.post("/api/org/events", authMiddleware, async (req, res) => {
+app.post("/api/org/event", authMiddleware, async (req, res) => {
   const { name, description, date } = req.body;
   try {
     const org = await Organization.findOne({ creator: req.user.userId });
@@ -1988,7 +1832,6 @@ app.post("/api/org/events", authMiddleware, async (req, res) => {
 
     org.projects.push({ name, description, date });
     await org.save();
-    sendOrgNotification(org._id, `New event created: ${name}`);
     res.json({ message: "Event created" });
   } catch (err) {
     console.error("Error creating event:", err);
@@ -2041,25 +1884,6 @@ app.put("/api/resources", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-app.get("/api/org/overview", authMiddleware, async (req, res) => {
-  try {
-    const org = await Organization.findOne({ creator: req.user.userId }).populate("volunteers");
-    if (!org) return res.status(404).json({ error: "Organization not found" });
-
-    const volunteers = await User.find({ "volunteerData.orgId": org._id });
-    const hoursVolunteered = volunteers.reduce((sum, v) => sum + v.volunteerData.find((d) => d.orgId.equals(org._id)).hours, 0);
-
-    res.json({
-      volunteers: org.volunteers.length,
-      projects: org.projects.length,
-      beneficiaries: org.projects.reduce((sum, proj) => sum + (proj.beneficiaries || 0), 0),
-      hoursVolunteered,
-    });
-  } catch (err) {
-    console.error("Error fetching org overview:", err);
-    res.status(500).json({ error: "Server error" });
-  }
-});
 
 // Update Donation Status
 app.put("/api/donations/:id", async (req, res) => {
@@ -2083,44 +1907,6 @@ app.put("/api/donations/:id", async (req, res) => {
     res.json({ message: "Donation updated" });
   } catch (error) {
     res.status(500).json({ message: error.message });
-  }
-});
-
-app.get("/api/org/tasks", authMiddleware, async (req, res) => {
-  try {
-    const org = await Organization.findOne({ creator: req.user.userId });
-    if (!org) return res.status(404).json({ error: "Organization not found" });
-
-    const volunteers = await User.find({ "volunteerData.orgId": org._id });
-    const tasks = volunteers.flatMap((v) =>
-      v.volunteerData
-        .find((d) => d.orgId.equals(org._id))
-        .tasks.map((t) => ({ volunteerName: v.name, description: t.description }))
-    );
-    res.json(tasks);
-  } catch (err) {
-    console.error("Error fetching tasks:", err);
-    res.status(500).json({ error: "Server error" });
-  }
-});
-
-app.post("/api/org/tasks", authMiddleware, async (req, res) => {
-  const { volunteerId, description } = req.body;
-  try {
-    const user = await User.findById(volunteerId);
-    const org = await Organization.findOne({ creator: req.user.userId });
-    if (!user || !org) return res.status(404).json({ error: "User or organization not found" });
-
-    const volunteerData = user.volunteerData.find((d) => d.orgId.equals(org._id));
-    if (!volunteerData) return res.status(404).json({ error: "Volunteer not found in this organization" });
-
-    volunteerData.tasks.push({ description, assignedAt: new Date() });
-    await user.save();
-    sendOrgNotification(org._id, `Task assigned to ${user.name}: ${description}`);
-    res.json({ message: "Task assigned successfully" });
-  } catch (err) {
-    console.error("Error assigning task:", err);
-    res.status(500).json({ error: "Server error" });
   }
 });
 
